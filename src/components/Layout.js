@@ -118,7 +118,7 @@ export default function Layout({ children }) {
         </nav>
 
         {/* Main Content */}
-        <main className="flex-1 p-8 bg-gray-100">
+        <main className="flex-1 bg-gray-100">
           {children}
         </main>
       </div>
