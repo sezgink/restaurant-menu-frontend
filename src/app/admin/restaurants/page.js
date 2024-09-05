@@ -1,7 +1,10 @@
+"use client"; // Mark this component as a Client Component
+
 // /pages/admin/restaurants.js
-import Layout from "../../components/Layout";
+import Layout from "../../../components/Layout";
+// import Layout from "../../components/Layout";
 import { useState } from "react";
-import RestaurantForm from "../../components/RestaurantForm";
+import RestaurantForm from "../../../components/RestaurantForm";
 
 export default function RestaurantsPage() {
   const [restaurants, setRestaurants] = useState([]); // Fetch from API

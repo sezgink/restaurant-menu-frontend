@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation"; // Use next/navigation instead of next/router
 import Link from "next/link"; // Import Link for navigation
+import 'dotenv/config'
 
 export default function LoginPage() {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -12,8 +13,10 @@ export default function LoginPage() {
   const onSubmit = async (data) => {
     try {
       // Handle login logic (e.g., send login data to API)
-      const res = await axios.post("/api/login", data);
+      const res = await axios.post("http://localhost:3000/api/login", data);
+      console.log(res) // For debug
       router.push("/admin/restaurants"); // Redirect to the admin page after successful login
+      // router.push("/admin/restaurants"); // Redirect to the admin page after successful login
     } catch (error) {
       console.error(error);
     }

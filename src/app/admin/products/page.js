@@ -1,4 +1,6 @@
 // src/app/admin/products/page.js
+"use client"; // Mark this component as a Client Component
+
 import { useState } from 'react';
 import Layout from '../../../components/Layout';
 import ProductForm from '../../../components/ProductForm';

@@ -1,7 +1,8 @@
-// /pages/admin/categories.js
-import Layout from "../../components/Layout";
+"use client"; // Mark this component as a Client Component
+
+import Layout from "../../../components/Layout";
 import { useState } from "react";
-import CategoryForm from "../../components/CategoryForm";
+import CategoryForm from "../../../components/CategoryForm";
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState([]); // Fetch from API
