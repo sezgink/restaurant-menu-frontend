@@ -3,23 +3,45 @@
 // src/components/Layout.js
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState,useContext,useEffect } from "react";
+
+// import { Providers } from '../context/Providers.js';
+import { RestaurantContext } from '../context/RestaurantContext.js';
 
 export default function Layout({ children }) {
   const [currentRestaurant, setCurrentRestaurant] = useState(null);
   const [isRestaurantDropdownOpen, setIsRestaurantDropdownOpen] = useState(false);
+  // const [restaurants, setRestaurants] = useState([]);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  // const { restaurants, addRestaurant} = useContext(Providers);
+  // const { restaurants, addRestaurant} = useContext(RestaurantContext);
+  const { restaurants} = useContext(RestaurantContext);
   
   const user = {
     email: "user@example.com", // Replace with actual user email data
   };
 
   // Mock restaurant data with icons
-  const restaurants = [
+  const restaurantsMock = [
     { id: 1, name: "Pizza Palace", icon: "🍕" },
     { id: 2, name: "Burger House", icon: "🍔" },
     { id: 3, name: "Sushi World", icon: "🍣" },
   ];
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        setRestaurants(restaurantsMock);
+        return;
+        const response = await axios.get("/api/restaurants"); // Replace with your API endpoint
+        setRestaurants(response.data); // Assuming the response contains restaurant data
+      } catch (error) {
+        console.error("Failed to fetch restaurants:", error);
+      }
+    };
+
+    fetchRestaurants();
+  }, []); // Empty dependency array ensures this runs only once
 
   const handleRestaurantChange = (restaurant) => {
     setCurrentRestaurant(restaurant); // Store the selected restaurant
