@@ -5,17 +5,27 @@ import axios from "axios";
 import { useRouter } from "next/navigation"; // Use next/navigation instead of next/router
 import Link from "next/link"; // Import Link for navigation
 import 'dotenv/config'
+import { useContext } from "react";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const router = useRouter();
+  const {loggedIn,authorized} = useContext(AuthContext)
 
   const onSubmit = async (data) => {
     try {
       // Handle login logic (e.g., send login data to API)
       const res = await axios.post("http://localhost:3000/api/login", data);
-      console.log(res) // For debug
-      router.push("/admin/restaurants"); // Redirect to the admin page after successful login
+      // console.log(res) // For debug
+      if(res.status==200){
+        loggedIn(res.data.userId,res.data.email);
+        // console.log("Login successful");
+        router.push("/admin/restaurants");
+      } else {
+        console.error("Login unsuccessful");
+      }
+       // Redirect to the admin page after successful login
       // router.push("/admin/restaurants"); // Redirect to the admin page after successful login
     } catch (error) {
       console.error(error);

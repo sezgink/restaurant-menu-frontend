@@ -21,45 +21,44 @@ export function AuthProvider({ children }) {
     try {
       // const response = await axios.get("/api/restaurants");
       // setRestaurants(response.data);
-      const storedUsername = localStorage.getItem('username') || '';
+      const storedUser = localStorage.getItem('userId') || '';
+      const storedEmail = localStorage.getItem('email') || '';
       const storedAuthorized = localStorage.getItem('authorized') === 'true';
-      setUser({storedUsername, });
+      if(storedAuthorized){
+        setUser({userId:storedUser,email:storedEmail});
+        setAuthorized(true)
+      } else {
+        setAuthorized(false)
+      }
+      
     } catch (error) {
       console.error("Failed load auth data:", error);
     }
   };
 
-  const loggedIn = async (username,email) => {
+  const loggedIn = async (userId,email) => {
     try {
       // const response = await axios.get("/api/restaurants");
       // setRestaurants(response.data);
-      const storedUsername = localStorage.getItem('username') || '';
-      const storedAuthorized = localStorage.getItem('authorized') === 'true';
-      setUser({storedUsername, });
+      localStorage.setItem('userId',userId)
+      localStorage.setItem('email',email)
+      localStorage.setItem('authorized',true)
+      setUser({userId,email});
+      setAuthorized(true);
     } catch (error) {
-      console.error("Failed load auth data:", error);
+      console.error("Failed set auth data:", error);
     }
   };
-
-  // Function to add a new restaurant
-  const addRestaurant = async (newRestaurant) => {
-    try {
-      await axios.post("/api/restaurants", newRestaurant);
-      fetchRestaurants(); // Refetch the updated restaurant list
-    } catch (error) {
-      console.error("Failed to add restaurant", error);
-    }
-  };
-
   useEffect(() => {
     fetchState(); // Fetch restaurants on mount
   }, []);
+
 
   // const contextValue = { restaurants, addRestaurant };
 
   return (
 
-    <AuthContext.Provider value={{ user,setUser,authorized,setAuthorized }}>
+    <AuthContext.Provider value={{ user,authorized,loggedIn }}>
       {children}
     </AuthContext.Provider>
   );
