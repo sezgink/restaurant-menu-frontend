@@ -1,13 +1,15 @@
 'use client';
 
 import { RestaurantProvider } from './RestaurantContext.js';
+import { AuthProvider } from './AuthContext.js';
 
 export function Providers({ children }) {
   return (
-
-    <RestaurantProvider>
-        {children}
-    </RestaurantProvider>
+    <AuthProvider>
+      <RestaurantProvider>
+          {children}
+      </RestaurantProvider>
+    </AuthProvider>
 
   );
 }
