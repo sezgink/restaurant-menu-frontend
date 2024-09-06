@@ -1,16 +1,19 @@
 "use client"; // Mark this component as a Client Component
 
-import { useState } from "react";
+import { useState,useContext } from "react";
 import Layout from "../../../components/Layout";
 import RestaurantForm from "../../../components/RestaurantForm";
 import Link from "next/link";
+import { RestaurantContext } from '../../../context/RestaurantContext.js';
 
 export default function RestaurantsPage() {
-  const [restaurants, setRestaurants] = useState([]);
+  // const [restaurants, setRestaurants] = useState([]);
+  const { restaurants,addRestaurant} = useContext(RestaurantContext);
   const [showCreateForm, setShowCreateForm] = useState(false);
 
   const handleCreateRestaurant = (newRestaurant) => {
-    setRestaurants([...restaurants, newRestaurant]);
+    // setRestaurants([...restaurants, newRestaurant]);
+    addRestaurant(newRestaurant);
     setShowCreateForm(false);
   };
 
