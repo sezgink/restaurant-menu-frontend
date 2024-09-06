@@ -21,6 +21,7 @@ export function AuthProvider({ children }) {
     try {
       // const response = await axios.get("/api/restaurants");
       // setRestaurants(response.data);
+    //   if(window.localStorage)
       const storedUser = localStorage.getItem('userId') || '';
       const storedEmail = localStorage.getItem('email') || '';
       const storedAuthorized = localStorage.getItem('authorized') === 'true';
@@ -49,6 +50,19 @@ export function AuthProvider({ children }) {
       console.error("Failed set auth data:", error);
     }
   };
+  const loggedOut = async () => {
+    try {
+      // const response = await axios.get("/api/restaurants");
+      // setRestaurants(response.data);
+      localStorage.setItem('userId',"")
+      localStorage.setItem('email',"")
+      localStorage.setItem('authorized',false)
+      setUser({});
+      setAuthorized(false);
+    } catch (error) {
+      console.error("Failed set auth data:", error);
+    }
+  };
   useEffect(() => {
     fetchState(); // Fetch restaurants on mount
   }, []);
@@ -58,7 +72,7 @@ export function AuthProvider({ children }) {
 
   return (
 
-    <AuthContext.Provider value={{ user,authorized,loggedIn }}>
+    <AuthContext.Provider value={{ user,authorized,loggedIn,loggedOut }}>
       {children}
     </AuthContext.Provider>
   );

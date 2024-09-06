@@ -55,7 +55,7 @@ export default function Layout({ children }) {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Top Bar */}
-      <header className="bg-gray-800 text-white flex justify-between items-center p-4">
+      <header className="fixed top-0 left-0 w-full bg-gray-800 text-white flex justify-between items-center p-4 z-50">
         {/* Left Side: App name or Logo */}
         <div className="flex items-center ml-6">
           <h2 className="text-2xl font-bold">App Name</h2>
@@ -116,9 +116,10 @@ export default function Layout({ children }) {
         </div>
       </header>
 
-      <div className="flex flex-1">
+      <div className="flex w-full">
         {/* Sidebar */}
-        <nav className="w-64 bg-gray-800 text-white flex flex-col py-6">
+        {/* <nav className="sticky top-16 w-64 bg-gray-800 text-white flex flex-col py-6 h-screen"> */}
+        <nav className="sticky top-52 w-64 bg-gray-800 text-white flex flex-col py-6 h-screen">
           <h2 className="text-2xl font-bold mb-8 px-6 text-left">Dashboard</h2>
           <ul className="space-y-4 w-full">
             <li>
@@ -140,7 +141,7 @@ export default function Layout({ children }) {
         </nav>
 
         {/* Main Content */}
-        <main className="flex-1 bg-gray-100">
+        <main className="flex-1 bg-gray-100 mt-16">
           {children}
         </main>
       </div>
