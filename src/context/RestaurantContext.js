@@ -26,9 +26,15 @@ export function RestaurantProvider({ children }) {
   // Fetch restaurants from API
   const fetchRestaurants = async () => {
     try {
-      // const response = await axios.get("/api/restaurants");
-      // setRestaurants(response.data);
-      setRestaurants(restaurantsMock);
+    //   if (typeof window == "undefined") {
+    //     console.log("Application fetch restnis on server side");
+    // } else {
+    //     alert("Application fetch rest is on client side");
+    // }
+      const response = await axios.get("http://localhost:3000/api/restaurants",{withCredentials:true});
+      console.log(response)
+      setRestaurants(response.data || []);
+      // setRestaurants(restaurantsMock);
     } catch (error) {
       console.error("Failed to fetch restaurants:", error);
     }
@@ -37,7 +43,8 @@ export function RestaurantProvider({ children }) {
   // Function to add a new restaurant
   const addRestaurant = async (newRestaurant) => {
     try {
-      await axios.post("/api/restaurants", newRestaurant);
+      const response = await axios.post("http://localhost:3000/api/restaurants", newRestaurant,{withCredentials:true});
+      console.log(response)
       fetchRestaurants(); // Refetch the updated restaurant list
     } catch (error) {
       console.error("Failed to add restaurant", error);

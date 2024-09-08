@@ -7,7 +7,6 @@ export default function RestaurantForm({ onCreate }) {
 
   const onSubmit = (data) => {
     onCreate({
-      id: Date.now(), // Temporary ID
       name: data.name,
     });
   };
