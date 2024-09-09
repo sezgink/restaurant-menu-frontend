@@ -1,16 +1,34 @@
 "use client"; // Mark this component as a Client Component
 
 import Layout from "../../../components/Layout";
-import { useState,useEffect } from "react";
+import { useState,useEffect,useContext } from "react";
 import CategoryForm from "../../../components/CategoryForm";
+import { RestaurantContext } from "@/context/RestaurantContext";
+import axios from "axios";
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState([]); // Fetch from API
   const [showCreateForm, setShowCreateForm] = useState(false);
 
-  const handleCreateCategory = (newCategory) => {
-    setCategories([...categories, newCategory]);
+  const { currentRestaurant,setCurrentRestaurant} = useContext(RestaurantContext);
+
+
+  const handleCreateCategory = async (newCategory) => {
+    //restaurants/:restaurantId/categories
+    console.log(currentRestaurant)
+    // newCategory = {category_name:"fuck",description:"fuck"}
+    console.log(newCategory)
+    try{
+    const response = await axios.post('http://localhost:3000/api/restaurants/'+currentRestaurant.id+'/categories',newCategory,{withCredentials:true,headers: {
+      'Content-Type': 'application/json', // Sending JSON data
+    }});
+    console.log(response);
+    setCategories(response.data || []);
     setShowCreateForm(false);
+    fetchCategories();
+    } catch(err){
+      console.log(err)
+    }
   };
 
   const fetchCategories = async ()=>{
@@ -20,8 +38,9 @@ export default function CategoriesPage() {
       // } else {
       //     alert("Application fetch rest is on client side");
       // }
-        const response = await axios.get("http://localhost:3000/api/categories",{withCredentials:true});
-        console.log(response)
+      console.log(currentRestaurant)
+      const response = await axios.get('http://localhost:3000/api/restaurants/'+currentRestaurant.id+'/categories',{withCredentials:true});
+      console.log(response);
         setCategories(response.data || []);
         // setRestaurants(restaurantsMock);
       } catch (error) {
@@ -33,7 +52,9 @@ export default function CategoriesPage() {
   useEffect(()=>{
     fetchCategories();
   },[])
-
+  useEffect(()=>{
+    fetchCategories();
+  },[currentRestaurant])
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-r from-gray-100 to-gray-300 flex flex-col items-center py-12 px-4">
@@ -45,7 +66,8 @@ export default function CategoriesPage() {
             {categories.map((category) => (
               <div key={category.id} className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
                 <img
-                  src={category.image}
+                  // src={category.image}
+                  src={'http://localhost:3000/uploads/' +category.category_pic}
                   alt={category.name}
                   className="w-40 h-40 object-cover mb-4 rounded-full shadow-md"
                 />

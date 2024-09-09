@@ -15,10 +15,10 @@ export default function CategoryForm({ onCreate }) {
   // Handle main form submission
   const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append("name", data.name);
+    formData.append("category_name", data.name);
     formData.append("description", data.description);
-    if(imageName!==""||imageName!=null){
-      formData.append("image_name", imageName); // Add the image name to the form data
+    if(imageName!==""&&imageName!=null&&imageName!==undefined){
+      formData.append("category_pic", imageName); // Add the image name to the form data
 
     }
 
@@ -29,6 +29,7 @@ export default function CategoryForm({ onCreate }) {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
+      setImageName(null)
       setUploadState("Uploading...");
       setUploadProgress(0);
 
@@ -52,7 +53,7 @@ export default function CategoryForm({ onCreate }) {
         const response = await axios.post("http://localhost:3000/api/uploadPic", formData,postConfig );
         // const response = await axios.post("http://localhost:3000/api/restaurants", formData,postConfig );
 
-        setImageName(response.data.imageName); // Assuming the server returns the image's name
+        setImageName(response.data.pic_name); // Assuming the server returns the image's name
         setUploadState("Upload complete");
       } catch (error) {
         setUploadState("Upload failed");
@@ -67,7 +68,7 @@ export default function CategoryForm({ onCreate }) {
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
         <input
-          name="name"
+          name="category_name"
           placeholder="Enter category name"
           className={`block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
             errors.name ? "border-red-500" : ""
@@ -116,7 +117,7 @@ export default function CategoryForm({ onCreate }) {
       {/* Main Form Submission is only enabled if the image is uploaded */}
       {imageName && (
         <>
-          <p className="text-green-500">Image uploaded successfully: {imageName}</p>
+          <p className="text-green-500">Image uploaded successfully</p>
 
           
         </>

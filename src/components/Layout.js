@@ -9,13 +9,13 @@ import { useState,useContext,useEffect } from "react";
 import { RestaurantContext } from '../context/RestaurantContext.js';
 
 export default function Layout({ children }) {
-  const [currentRestaurant, setCurrentRestaurant] = useState(null);
+  // const [currentRestaurant, setCurrentRestaurant] = useState(null);
   const [isRestaurantDropdownOpen, setIsRestaurantDropdownOpen] = useState(false);
   // const [restaurants, setRestaurants] = useState([]);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   // const { restaurants, addRestaurant} = useContext(Providers);
   // const { restaurants, addRestaurant} = useContext(RestaurantContext);
-  const { restaurants} = useContext(RestaurantContext);
+  const { restaurants, currentRestaurant,setCurrentRestaurant} = useContext(RestaurantContext);
   
   const user = {
     email: "user@example.com", // Replace with actual user email data

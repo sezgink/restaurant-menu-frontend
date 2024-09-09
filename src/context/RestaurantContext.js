@@ -13,6 +13,7 @@ export const RestaurantContext = createContext();
 // Create a provider component
 export function RestaurantProvider({ children }) {
   const [restaurants, setRestaurants] = useState([]);
+  const [currentRestaurant, setCurrentRestaurant] = useState(-1);
 
   const restaurantsMock = [
     { id: 1, name: "Pizza Palace", icon: "🍕" },
@@ -60,7 +61,7 @@ export function RestaurantProvider({ children }) {
   return (
     // <RestaurantContext.Provider value={restaurants}>
     // <RestaurantContext.Provider value={contextValue}>
-    <RestaurantContext.Provider value={{ restaurants, addRestaurant }}>
+    <RestaurantContext.Provider value={{ restaurants, addRestaurant,currentRestaurant,setCurrentRestaurant }}>
       {children}
     </RestaurantContext.Provider>
   );
