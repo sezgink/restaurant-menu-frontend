@@ -13,7 +13,6 @@ export const RestaurantContext = createContext();
 // Create a provider component
 export function RestaurantProvider({ children }) {
   const [restaurants, setRestaurants] = useState([]);
-  const [user, setUser] = useState({});
 
   const restaurantsMock = [
     { id: 1, name: "Pizza Palace", icon: "🍕" },
@@ -39,6 +38,7 @@ export function RestaurantProvider({ children }) {
       console.error("Failed to fetch restaurants:", error);
     }
   };
+
 
   // Function to add a new restaurant
   const addRestaurant = async (newRestaurant) => {

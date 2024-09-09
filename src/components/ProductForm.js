@@ -43,7 +43,6 @@ export default function ProductForm({ onCreate }) {
         />
         {errors.image && <p>{errors.image.message}</p>}
       </div>
-
       <button type="submit">Create Product</button>
     </form>
   );

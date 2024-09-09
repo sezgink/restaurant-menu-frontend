@@ -1,7 +1,7 @@
 "use client"; // Mark this component as a Client Component
 
 import Layout from "../../../components/Layout";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import CategoryForm from "../../../components/CategoryForm";
 
 export default function CategoriesPage() {
@@ -12,6 +12,27 @@ export default function CategoriesPage() {
     setCategories([...categories, newCategory]);
     setShowCreateForm(false);
   };
+
+  const fetchCategories = async ()=>{
+    try {
+      //   if (typeof window == "undefined") {
+      //     console.log("Application fetch restnis on server side");
+      // } else {
+      //     alert("Application fetch rest is on client side");
+      // }
+        const response = await axios.get("http://localhost:3000/api/categories",{withCredentials:true});
+        console.log(response)
+        setCategories(response.data || []);
+        // setRestaurants(restaurantsMock);
+      } catch (error) {
+        console.error("Failed to fetch restaurants:", error);
+      }
+
+  }
+
+  useEffect(()=>{
+    fetchCategories();
+  },[])
 
   return (
     <Layout>
