@@ -8,7 +8,7 @@ import { RestaurantContext } from '../../../context/RestaurantContext.js';
 
 export default function RestaurantsPage() {
   // const [restaurants, setRestaurants] = useState([]);
-  const { restaurants,addRestaurant} = useContext(RestaurantContext);
+  const { restaurants,addRestaurant,setCurrentRestaurant,currentRestaurant} = useContext(RestaurantContext);
   const [showCreateForm, setShowCreateForm] = useState(false);
 
   const handleCreateRestaurant = (newRestaurant) => {
@@ -16,6 +16,12 @@ export default function RestaurantsPage() {
     addRestaurant(newRestaurant);
     setShowCreateForm(false);
   };
+
+  const handleClickRestaurant = (newId)=>{
+    console.log(newId);
+
+    setCurrentRestaurant(newId);
+  }
 
   return (
     <Layout>
@@ -30,13 +36,16 @@ export default function RestaurantsPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
               {restaurants.map((restaurant) => (
+                <div className="bg-white shadow-lg rounded-lg p-4 hover:shadow-xl transition-shadow" onClick={()=>handleClickRestaurant(restaurant)}>
                 <Link
                   key={restaurant.id}
                   href={`/admin/restaurants/${restaurant.id}`}
-                  className="bg-white shadow-lg rounded-lg p-4 hover:shadow-xl transition-shadow"
+                  
+                  // className="bg-white shadow-lg rounded-lg p-4 hover:shadow-xl transition-shadow"
                 >
                   <h3 className="text-xl font-semibold text-gray-800">{restaurant.name}</h3>
                 </Link>
+                </div>
               ))}
             </div>
           )}
