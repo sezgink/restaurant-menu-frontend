@@ -23,7 +23,9 @@ export default function CategoriesPage() {
       'Content-Type': 'application/json', // Sending JSON data
     }});
     console.log(response);
-    setCategories(response.data || []);
+    
+
+    // setCategories(fetchedCategories || []);
     setShowCreateForm(false);
     fetchCategories();
     } catch(err){
@@ -41,7 +43,9 @@ export default function CategoriesPage() {
       console.log(currentRestaurant)
       const response = await axios.get('http://localhost:3000/api/restaurants/'+currentRestaurant.id+'/categories',{withCredentials:true});
       console.log(response);
-        setCategories(response.data || []);
+      const fetchedCategories = response.data.filter(
+        (category) => category.category_name.trim().toLowerCase() !== "uncategorized" );
+        setCategories(fetchedCategories || []);
         // setRestaurants(restaurantsMock);
       } catch (error) {
         console.error("Failed to fetch restaurants:", error);
