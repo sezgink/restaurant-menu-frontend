@@ -58,7 +58,7 @@ export default function Layout({ children }) {
       <header className="fixed top-0 left-0 w-full bg-gray-800 text-white flex justify-between items-center p-4 z-50">
         {/* Left Side: App name or Logo */}
         <div className="flex items-center ml-6">
-          <h2 className="text-2xl font-bold">App Name</h2>
+          <h2 className="text-2xl font-bold">Menu Studio</h2>
         </div>
 
         {/* Right Side: Restaurant selector and User email with dropdown */}
