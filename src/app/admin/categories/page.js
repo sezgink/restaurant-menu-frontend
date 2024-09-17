@@ -49,7 +49,7 @@ export default function CategoriesPage() {
         setCategories(fetchedCategories || []);
         // setRestaurants(restaurantsMock);
       } catch (error) {
-        console.error("Failed to fetch restaurants:", error);
+        console.error("Failed to fetch categories:", error);
       }
 
   }

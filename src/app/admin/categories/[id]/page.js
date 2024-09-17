@@ -44,14 +44,13 @@ export default function CategoryProductsPage({params}) {
       //     alert("Application fetch rest is on client side");
       // }
       console.log(currentRestaurant)
-      const response = await axios.get('http://localhost:3000/api/restaurants/'+currentRestaurant.id+'/categories/'+id+'/products',{withCredentials:true});
+      const response = await axios.get('http://localhost:3000/api/restaurants/'+currentRestaurant.id+'/products/categories/'+id,{withCredentials:true});
       console.log(response);
-      const fetchedCategories = response.data.filter(
-        (category) => category.category_name.trim().toLowerCase() !== "uncategorized" );
-        setProducts(fetchedCategories || []);
+      const fetchedProducts = response.data;
+        setProducts(fetchedProducts || []);
         // setRestaurants(restaurantsMock);
       } catch (error) {
-        console.error("Failed to fetch restaurants:", error);
+        console.error("Failed to fetch category products:", error);
       }
 
   }
@@ -61,7 +60,7 @@ export default function CategoryProductsPage({params}) {
   },[])
   useEffect(()=>{
     fetchCategoryProducts();
-  },[currentRestaurant])
+  },[currentRestaurant,id])
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-r from-gray-100 to-gray-300 flex flex-col items-center py-12 px-4">

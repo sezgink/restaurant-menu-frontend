@@ -6,7 +6,7 @@ import axios from "axios";
 
 
 
-export default function CategoryForm({ onCreate }) {
+export default function CategoryProductForm({ onCreate }) {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const [imageName, setImageName] = useState(null); // Store the image name after upload
   const [uploadState, setUploadState] = useState(null); // Manage upload state
@@ -15,8 +15,9 @@ export default function CategoryForm({ onCreate }) {
   // Handle main form submission
   const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append("product_name", data.name);
+    formData.append("name", data.name);
     formData.append("description", data.description);
+    formData.append("price", data.price);
     if(imageName!==""&&imageName!=null&&imageName!==undefined){
       formData.append("product_pic", imageName); // Add the image name to the form data
     }
@@ -65,10 +66,10 @@ export default function CategoryForm({ onCreate }) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
       {/* Category Name */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
         <input
           name="name"
-          placeholder="Enter category name"
+          placeholder="Enter product name"
           className={`block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
             errors.name ? "border-red-500" : ""
           } text-black bg-white`}
@@ -79,7 +80,7 @@ export default function CategoryForm({ onCreate }) {
 
       {/* Category Description */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Category Description</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Product Description</label>
         <textarea
           name="description"
           placeholder="Enter category description"
@@ -92,9 +93,24 @@ export default function CategoryForm({ onCreate }) {
         {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
       </div>
 
+      {/* Price */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Product Price</label>
+        <textarea
+          name="price"
+          placeholder="Enter price"
+          rows="4"
+          className={`block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+            errors.description ? "border-red-500" : ""
+          } text-black bg-white`}
+          {...register("price", { required: "Price is required" })}
+        />
+        {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price.message}</p>}
+      </div>
+
       {/* Image Upload Form */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Category Image</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Product Image</label>
         <input
           type="file"
           name="image"
@@ -126,7 +142,7 @@ export default function CategoryForm({ onCreate }) {
             type="submit"
             className="bg-indigo-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-200"
           >
-            Create Category
+            Create Product
           </button>
     </form>
   );
