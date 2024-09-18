@@ -36,9 +36,9 @@ export default function RestaurantsPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
               {restaurants.map((restaurant) => (
-                <div className="bg-white shadow-lg rounded-lg p-4 hover:shadow-xl transition-shadow" onClick={()=>handleClickRestaurant(restaurant)}>
+                <div className="bg-white shadow-lg rounded-lg p-4 hover:shadow-xl transition-shadow" key={restaurant.id} onClick={()=>handleClickRestaurant(restaurant)}>
                 <Link
-                  key={restaurant.id}
+                  
                   href={`/admin/restaurants/${restaurant.id}`}
                   
                   // className="bg-white shadow-lg rounded-lg p-4 hover:shadow-xl transition-shadow"
