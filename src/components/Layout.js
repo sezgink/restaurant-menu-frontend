@@ -7,6 +7,7 @@ import { useState,useContext,useEffect } from "react";
 
 // import { Providers } from '../context/Providers.js';
 import { RestaurantContext } from '../context/RestaurantContext.js';
+import { AuthContext } from "@/context/AuthContext.js"; 
 
 export default function Layout({ children }) {
   // const [currentRestaurant, setCurrentRestaurant] = useState(null);
@@ -16,10 +17,11 @@ export default function Layout({ children }) {
   // const { restaurants, addRestaurant} = useContext(Providers);
   // const { restaurants, addRestaurant} = useContext(RestaurantContext);
   const { restaurants, currentRestaurant,setCurrentRestaurant} = useContext(RestaurantContext);
+  const { user} = useContext(AuthContext);
   
-  const user = {
-    email: "user@example.com", // Replace with actual user email data
-  };
+  // const user = {
+  //   email: "user@example.com", // Replace with actual user email data
+  // };
 
   // Mock restaurant data with icons
   const restaurantsMock = [
