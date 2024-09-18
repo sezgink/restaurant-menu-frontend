@@ -52,11 +52,12 @@ export function AuthProvider({ children }) {
   };
   const loggedOut = async () => {
     try {
-      // const response = await axios.get("/api/restaurants");
+      const response = await axios.post("http://localhost:3000/api/logout");
+      // console.log(response);
       // setRestaurants(response.data);
-      localStorage.setItem('userId',"")
-      localStorage.setItem('email',"")
-      localStorage.setItem('authorized',false)
+      localStorage.setItem('userId',"");
+      localStorage.setItem('email',"");
+      localStorage.setItem('authorized',false);
       setUser({});
       setAuthorized(false);
     } catch (error) {
