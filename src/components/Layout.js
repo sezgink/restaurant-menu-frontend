@@ -5,12 +5,16 @@ import { redirect } from 'next/navigation'
 import { useState, useContext, useEffect } from "react";
 import { RestaurantContext } from '../context/RestaurantContext.js';
 import { AuthContext } from "@/context/AuthContext.js"; 
+import { useRouter } from 'next/navigation';
 
 export default function Layout({ children }) {
   const [isRestaurantDropdownOpen, setIsRestaurantDropdownOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { restaurants, addRestaurant, currentRestaurant, setCurrentRestaurant } = useContext(RestaurantContext);
   const { user,loggedOut } = useContext(AuthContext);
+
+  const { push } = useRouter();
+  
 
   // Mock restaurant data with icons
   const restaurantsMock = [
@@ -43,12 +47,8 @@ export default function Layout({ children }) {
     // console.log("User logged out");
     loggedOut();
     setIsUserMenuOpen(false);
-    redirect('/login');
-
-    // try{
-    // } catch(err){
-    //   console.log(err);
-    // }
+    // redirect('/login');
+    push('/auth/login');
     
   };
 
