@@ -1,6 +1,7 @@
 // src/components/Layout.js
 
 import Link from "next/link";
+import { redirect } from 'next/navigation'
 import { useState, useContext, useEffect } from "react";
 import { RestaurantContext } from '../context/RestaurantContext.js';
 import { AuthContext } from "@/context/AuthContext.js"; 
@@ -8,8 +9,8 @@ import { AuthContext } from "@/context/AuthContext.js";
 export default function Layout({ children }) {
   const [isRestaurantDropdownOpen, setIsRestaurantDropdownOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const { restaurants, setRestaurants, currentRestaurant, setCurrentRestaurant } = useContext(RestaurantContext);
-  const { user } = useContext(AuthContext);
+  const { restaurants, addRestaurant, currentRestaurant, setCurrentRestaurant } = useContext(RestaurantContext);
+  const { user,loggedOut } = useContext(AuthContext);
 
   // Mock restaurant data with icons
   const restaurantsMock = [
@@ -18,28 +19,37 @@ export default function Layout({ children }) {
     { id: 3, name: "Sushi World", icon: "🍣" },
   ];
 
-  useEffect(() => {
-    const fetchRestaurants = async () => {
-      try {
-        setRestaurants(restaurantsMock);
-        // Uncomment and modify the following lines if you're fetching from an API
-        // const response = await axios.get("/api/restaurants"); // Replace with your API endpoint
-        // setRestaurants(response.data);
-      } catch (error) {
-        console.error("Failed to fetch restaurants:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchRestaurants = async () => {
+  //     try {
+  //       setRestaurants(restaurantsMock);
+  //       // Uncomment and modify the following lines if you're fetching from an API
+  //       // const response = await axios.get("/api/restaurants"); // Replace with your API endpoint
+  //       // setRestaurants(response.data);
+  //     } catch (error) {
+  //       console.error("Failed to fetch restaurants:", error);
+  //     }
+  //   };
 
-    fetchRestaurants();
-  }, [setRestaurants]);
+  //   fetchRestaurants();
+  // }, [setRestaurants]);
 
   const handleRestaurantChange = (restaurant) => {
     setCurrentRestaurant(restaurant); // Store the selected restaurant
     setIsRestaurantDropdownOpen(false); // Close the dropdown after selection
   };
 
-  const handleLogout = () => {
-    console.log("User logged out");
+  const handleLogout = async () => {
+    // console.log("User logged out");
+    loggedOut();
+    setIsUserMenuOpen(false);
+    redirect('/login');
+
+    // try{
+    // } catch(err){
+    //   console.log(err);
+    // }
+    
   };
 
   return (
