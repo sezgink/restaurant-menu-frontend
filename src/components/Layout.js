@@ -1,27 +1,15 @@
 // src/components/Layout.js
 
-// src/components/Layout.js
-
 import Link from "next/link";
-import { useState,useContext,useEffect } from "react";
-
-// import { Providers } from '../context/Providers.js';
+import { useState, useContext, useEffect } from "react";
 import { RestaurantContext } from '../context/RestaurantContext.js';
 import { AuthContext } from "@/context/AuthContext.js"; 
 
 export default function Layout({ children }) {
-  // const [currentRestaurant, setCurrentRestaurant] = useState(null);
   const [isRestaurantDropdownOpen, setIsRestaurantDropdownOpen] = useState(false);
-  // const [restaurants, setRestaurants] = useState([]);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  // const { restaurants, addRestaurant} = useContext(Providers);
-  // const { restaurants, addRestaurant} = useContext(RestaurantContext);
-  const { restaurants, currentRestaurant,setCurrentRestaurant} = useContext(RestaurantContext);
-  const { user} = useContext(AuthContext);
-  
-  // const user = {
-  //   email: "user@example.com", // Replace with actual user email data
-  // };
+  const { restaurants, setRestaurants, currentRestaurant, setCurrentRestaurant } = useContext(RestaurantContext);
+  const { user } = useContext(AuthContext);
 
   // Mock restaurant data with icons
   const restaurantsMock = [
@@ -34,16 +22,16 @@ export default function Layout({ children }) {
     const fetchRestaurants = async () => {
       try {
         setRestaurants(restaurantsMock);
-        return;
-        const response = await axios.get("/api/restaurants"); // Replace with your API endpoint
-        setRestaurants(response.data); // Assuming the response contains restaurant data
+        // Uncomment and modify the following lines if you're fetching from an API
+        // const response = await axios.get("/api/restaurants"); // Replace with your API endpoint
+        // setRestaurants(response.data);
       } catch (error) {
         console.error("Failed to fetch restaurants:", error);
       }
     };
 
     fetchRestaurants();
-  }, []); // Empty dependency array ensures this runs only once
+  }, [setRestaurants]);
 
   const handleRestaurantChange = (restaurant) => {
     setCurrentRestaurant(restaurant); // Store the selected restaurant
@@ -55,11 +43,11 @@ export default function Layout({ children }) {
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-col min-h-screen">
       {/* Top Bar */}
-      <header className="fixed top-0 left-0 w-full bg-gray-800 text-white flex justify-between items-center p-4 z-50">
+      <header className="fixed top-0 left-0 w-full bg-gray-800 text-white flex justify-between items-center h-16 px-6 z-50">
         {/* Left Side: App name or Logo */}
-        <div className="flex items-center ml-6">
+        <div className="flex items-center">
           <h2 className="text-2xl font-bold">Menu Studio</h2>
         </div>
 
@@ -118,35 +106,32 @@ export default function Layout({ children }) {
         </div>
       </header>
 
-      <div className="flex w-full">
-        {/* Sidebar */}
-        {/* <nav className="sticky top-16 w-64 bg-gray-800 text-white flex flex-col py-6 h-screen"> */}
-        <nav className="sticky top-52 w-64 bg-gray-800 text-white flex flex-col py-6 h-screen">
-          <h2 className="text-2xl font-bold mb-8 px-6 text-left">Dashboard</h2>
-          <ul className="space-y-4 w-full">
-            <li>
-              <Link href="/admin/restaurants" className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left">
-                Restaurants
-              </Link>
-            </li>
-            <li>
-              <Link href="/admin/categories" className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left">
-                Categories
-              </Link>
-            </li>
-            <li>
-              <Link href="/admin/products" className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left">
-                Products
-              </Link>
-            </li>
-          </ul>
-        </nav>
+      {/* Sidebar */}
+      <nav className="fixed top-16 left-0 w-64 bg-gray-800 text-white flex flex-col py-6 h-full">
+        <h2 className="text-2xl font-bold mb-8 px-6 text-left">Dashboard</h2>
+        <ul className="space-y-4 w-full">
+          <li>
+            <Link href="/admin/restaurants" className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left">
+              Restaurants
+            </Link>
+          </li>
+          <li>
+            <Link href="/admin/categories" className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left">
+              Categories
+            </Link>
+          </li>
+          <li>
+            <Link href="/admin/products" className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left">
+              Products
+            </Link>
+          </li>
+        </ul>
+      </nav>
 
-        {/* Main Content */}
-        <main className="flex-1 bg-gray-100 mt-16">
-          {children}
-        </main>
-      </div>
+      {/* Main Content */}
+      <main className="flex-1 bg-gray-100 ml-64 mt-16">
+        {children}
+      </main>
     </div>
   );
 }
