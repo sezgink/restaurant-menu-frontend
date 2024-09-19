@@ -20,7 +20,7 @@ export default function CategoriesPage() {
     // newCategory = {category_name:"fuck",description:"fuck"}
     console.log(newCategory)
     try{
-    const response = await axios.post('http://localhost:3000/api/restaurants/'+currentRestaurant.id+'/categories',newCategory,{withCredentials:true,headers: {
+    const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+currentRestaurant.id+'/categories',newCategory,{withCredentials:true,headers: {
       'Content-Type': 'application/json', // Sending JSON data
     }});
     console.log(response);
@@ -42,7 +42,7 @@ export default function CategoriesPage() {
       //     alert("Application fetch rest is on client side");
       // }
       console.log(currentRestaurant)
-      const response = await axios.get('http://localhost:3000/api/restaurants/'+currentRestaurant.id+'/categories',{withCredentials:true});
+      const response = await axios.get(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+currentRestaurant.id+'/categories',{withCredentials:true});
       console.log(response);
       const fetchedCategories = response.data.filter(
         (category) => category.category_name.trim().toLowerCase() !== "uncategorized" );
@@ -73,7 +73,7 @@ export default function CategoriesPage() {
                 <Link href={`/admin/categories/${category.id}`}>
                 <img
                   // src={category.image}
-                  src={'http://localhost:3000/uploads/' +category.category_pic}
+                  src={process.env.NEXT_PUBLIC_API_URL+'/uploads/' +category.category_pic}
                   alt={category.name}
                   className="w-40 h-40 object-cover mb-4 rounded-md shadow-md"
                   // className="w-40 h-40 object-cover mb-4 rounded-full shadow-md"

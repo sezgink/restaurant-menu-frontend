@@ -52,7 +52,7 @@ export function AuthProvider({ children }) {
   };
   const loggedOut = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/api/logout");
+      const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+"/api/logout");
       // console.log(response);
       // setRestaurants(response.data);
       localStorage.setItem('userId',"");

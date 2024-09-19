@@ -17,7 +17,7 @@ export default function LoginPage() {
     try {
       // Handle login logic (e.g., send login data to API)
      
-      const res = await axios.post("http://localhost:3000/api/login", data,{withCredentials:true});
+      const res = await axios.post(process.env.NEXT_PUBLIC_API_URL+"/api/login", data,{withCredentials:true});
       // console.log(res) // For debug
       if(res.status==200){
         loggedIn(res.data.userId,res.data.email);

@@ -22,7 +22,7 @@ export default function CategoryProductsPage({params}) {
     // console.log(newProduct)
     newProduct.append("category_id",id);
     try{
-    const response = await axios.post('http://localhost:3000/api/restaurants/'+currentRestaurant.id+'/products',newProduct,{withCredentials:true,headers: {
+    const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+currentRestaurant.id+'/products',newProduct,{withCredentials:true,headers: {
       'Content-Type': 'application/json', // Sending JSON data
     }});
     console.log(response);
@@ -44,7 +44,7 @@ export default function CategoryProductsPage({params}) {
       //     alert("Application fetch rest is on client side");
       // }
       console.log(currentRestaurant)
-      const response = await axios.get('http://localhost:3000/api/restaurants/'+currentRestaurant.id+'/products/categories/'+id,{withCredentials:true});
+      const response = await axios.get(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+currentRestaurant.id+'/products/categories/'+id,{withCredentials:true});
       console.log(response);
       const fetchedProducts = response.data;
         setProducts(fetchedProducts || []);
@@ -73,7 +73,7 @@ export default function CategoryProductsPage({params}) {
               <div key={product.id} className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
                 <img
                   // src={category.image}
-                  src={'http://localhost:3000/uploads/' +product.product_pic}
+                  src={process.env.NEXT_PUBLIC_API_URL+'/uploads/' +product.product_pic}
                   alt={product.name}
                   className="w-40 h-40 object-cover mb-4 rounded-md shadow-md"
                   // className="w-40 h-40 object-cover mb-4 rounded-full shadow-md"

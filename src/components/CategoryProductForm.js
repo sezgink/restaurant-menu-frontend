@@ -50,8 +50,8 @@ export default function CategoryProductForm({ onCreate }) {
         }; 
 
 
-        const response = await axios.post("http://localhost:3000/api/uploadPic", formData,postConfig );
-        // const response = await axios.post("http://localhost:3000/api/restaurants", formData,postConfig );
+        const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+"/api/uploadPic", formData,postConfig );
+        // const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+"/api/restaurants", formData,postConfig );
 
         setImageName(response.data.pic_name); // Assuming the server returns the image's name
         setUploadState("Upload complete");

@@ -12,7 +12,7 @@ export default function RegisterPage() {
   const onSubmit = async (data) => {
     try {
       // Send registration data to the API
-      const res = await axios.post('http://localhost:3000/api/register', data);
+      const res = await axios.post(process.env.NEXT_PUBLIC_API_URL+'/api/register', data);
       router.push('/auth/login'); // Redirect to the login page after successful registration
     } catch (error) {
       console.error(error);

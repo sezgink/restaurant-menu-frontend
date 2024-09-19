@@ -31,7 +31,7 @@ export function RestaurantProvider({ children }) {
     // } else {
     //     alert("Application fetch rest is on client side");
     // }
-      const response = await axios.get("http://localhost:3000/api/restaurants",{withCredentials:true});
+      const response = await axios.get(process.env.NEXT_PUBLIC_API_URL+"/api/restaurants",{withCredentials:true});
       console.log(response)
       setRestaurants(response.data || []);
       // setRestaurants(restaurantsMock);
@@ -44,7 +44,7 @@ export function RestaurantProvider({ children }) {
   // Function to add a new restaurant
   const addRestaurant = async (newRestaurant) => {
     try {
-      const response = await axios.post("http://localhost:3000/api/restaurants", newRestaurant,{withCredentials:true});
+      const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+"/api/restaurants", newRestaurant,{withCredentials:true});
       console.log(response)
       fetchRestaurants(); // Refetch the updated restaurant list
     } catch (error) {
