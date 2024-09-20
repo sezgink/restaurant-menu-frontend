@@ -8,7 +8,7 @@ import { useState } from 'react';
 import Layout from '../../../../components/Layout';
 
 export default function RestaurantProfilePage({ params }) {
-  const { id } = params; // Get the restaurant ID from the URL
+  const { restaurantId } = params; // Get the restaurant ID from the URL
   const [activeTab, setActiveTab] = useState('categories'); // Default tab
 
   // Dummy data for categories and products
@@ -25,7 +25,7 @@ export default function RestaurantProfilePage({ params }) {
   return (
     <Layout>
       <div className="container mx-auto p-6">
-        <h2 className="text-3xl font-bold mb-6">Restaurant Profile (ID: {id})</h2>
+        <h2 className="text-3xl font-bold mb-6">Restaurant Profile (ID: {restaurantId})</h2>
 
         {/* Tab Navigation */}
         <div className="flex space-x-4 border-b mb-4">

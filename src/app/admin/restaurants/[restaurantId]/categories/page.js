@@ -1,28 +1,28 @@
 "use client"; // Mark this component as a Client Component
 
-import Layout from "@/components/Layout";
+import Layout from "../../../../../components/Layout";
 import { useState,useEffect,useContext } from "react";
-import CategoryProductForm from "@/components/CategoryProductForm";
+import CategoryForm from "../../../../../components/CategoryForm";
 import { RestaurantContext } from "@/context/RestaurantContext";
 import axios from "axios";
+import Link from "next/link";
 
-export default function CategoryProductsPage({params}) {
-  const [products, setProducts] = useState([]); // Fetch from API
+export default function CategoriesPage({params}) {
+  const [categories, setCategories] = useState([]); // Fetch from API
   const [showCreateForm, setShowCreateForm] = useState(false);
 
   const { currentRestaurant,setCurrentRestaurant} = useContext(RestaurantContext);
+  const { restaurantId } = params; // Get the restaurant ID from the URL
 
-  const { id } = params; // Get the restaurant ID from the URL
 
-
-  const handleCreateProduct = async (newProduct) => {
+  const handleCreateCategory = async (newCategory) => {
     //restaurants/:restaurantId/categories
     console.log(currentRestaurant)
     // newCategory = {category_name:"fuck",description:"fuck"}
-    // console.log(newProduct)
-    newProduct.append("category_id",id);
+    console.log(newCategory)
     try{
-    const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+currentRestaurant.id+'/products',newProduct,{withCredentials:true,headers: {
+    // const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+currentRestaurant.id+'/categories',newCategory,{withCredentials:true,headers: {
+    const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+restaurantId+'/categories',newCategory,{withCredentials:true,headers: {
       'Content-Type': 'application/json', // Sending JSON data
     }});
     console.log(response);
@@ -30,13 +30,13 @@ export default function CategoryProductsPage({params}) {
 
     // setCategories(fetchedCategories || []);
     setShowCreateForm(false);
-    fetchCategoryProducts();
+    fetchCategories();
     } catch(err){
       console.log(err)
     }
   };
 
-  const fetchCategoryProducts = async ()=>{
+  const fetchCategories = async ()=>{
     try {
       //   if (typeof window == "undefined") {
       //     console.log("Application fetch restnis on server side");
@@ -44,47 +44,51 @@ export default function CategoryProductsPage({params}) {
       //     alert("Application fetch rest is on client side");
       // }
       console.log(currentRestaurant)
-      const response = await axios.get(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+currentRestaurant.id+'/products/categories/'+id,{withCredentials:true});
+      const response = await axios.get(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+restaurantId+'/categories',{withCredentials:true});
       console.log(response);
-      const fetchedProducts = response.data;
-        setProducts(fetchedProducts || []);
+      const fetchedCategories = response.data.filter(
+        (category) => category.category_name.trim().toLowerCase() !== "uncategorized" );
+        setCategories(fetchedCategories || []);
         // setRestaurants(restaurantsMock);
       } catch (error) {
-        console.error("Failed to fetch category products:", error);
+        console.error("Failed to fetch categories:", error);
       }
 
   }
 
   useEffect(()=>{
-    fetchCategoryProducts();
+    fetchCategories();
   },[])
   useEffect(()=>{
-    fetchCategoryProducts();
-  },[currentRestaurant,id])
+    fetchCategories();
+  },[currentRestaurant])
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-r from-gray-100 to-gray-300 flex flex-col items-center py-12 px-4">
-        <h2 className="text-4xl font-extrabold text-gray-800 mb-8 text-center">Selected Category Products</h2>
+        <h2 className="text-4xl font-extrabold text-gray-800 mb-8 text-center">Categories</h2>
 
         {/* Categories Grid */}
-        {products.length > 0 ? (
+        {categories.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 w-full max-w-7xl">
-            {products.map((product) => (
-              <div key={product.id} className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
+            {categories.map((category) => (
+              <div key={category.id} className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
+                <Link href={`/admin/restaurants/${restaurantId}/categories/${category.id}`}>
+                {/* <Link href={`/admin/categories/${category.id}`}> */}
                 <img
                   // src={category.image}
-                  src={process.env.NEXT_PUBLIC_API_URL+'/uploads/' +product.product_pic}
-                  alt={product.name}
+                  src={process.env.NEXT_PUBLIC_API_URL+'/uploads/' +category.category_pic}
+                  alt={category.name}
                   className="w-40 h-40 object-cover mb-4 rounded-md shadow-md"
                   // className="w-40 h-40 object-cover mb-4 rounded-full shadow-md"
                 />
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">{product.product_name}</h3>
-                <p className="text-gray-600 text-center">{product.description}</p>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">{category.category_name}</h3>
+                <p className="text-gray-600 text-center">{category.description}</p>
+                </Link>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-lg text-gray-600 mb-8 text-center">No produts available on this category. Please create one.</p>
+          <p className="text-lg text-gray-600 mb-8 text-center">No categories available. Please create one.</p>
         )}
 
         {/* Create Category Button */}
@@ -100,7 +104,7 @@ export default function CategoryProductsPage({params}) {
         {/* Create Category Form */}
         {showCreateForm && (
           <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
-            <CategoryProductForm onCreate={handleCreateProduct} />
+            <CategoryForm onCreate={handleCreateCategory} />
           </div>
         )}
       </div>
