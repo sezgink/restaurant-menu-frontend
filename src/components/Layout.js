@@ -78,7 +78,7 @@ export default function Layout({ children }) {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Top Bar */}
-      <header className="fixed top-0 left-0 w-full bg-gray-800 text-white flex justify-between items-center h-16 px-6 z-50">
+      <header className="fixed top-0 left-0 w-full bg-gray-900 text-white flex justify-between items-center h-16 px-6 z-50 ">
         {/* Left Side: App name or Logo */}
         <div className="flex items-center">
           <h2 className="text-2xl font-bold">Menu Studio</h2>
