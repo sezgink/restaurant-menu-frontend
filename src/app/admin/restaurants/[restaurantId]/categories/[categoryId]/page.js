@@ -10,7 +10,7 @@ export default function CategoryProductsPage({params}) {
   const [products, setProducts] = useState([]); // Fetch from API
   const [showCreateForm, setShowCreateForm] = useState(false);
 
-  const { currentRestaurant,setCurrentRestaurant} = useContext(RestaurantContext);
+  const { currentRestaurant,setCurrentRestaurant,chooseRestaurantById} = useContext(RestaurantContext);
 
   const { categoryId,restaurantId } = params; // Get the restaurant ID from the URL
 
@@ -36,6 +36,7 @@ export default function CategoryProductsPage({params}) {
       console.log(err)
     }
   };
+  
 
   const fetchCategoryProducts = async ()=>{
     try {
@@ -45,6 +46,8 @@ export default function CategoryProductsPage({params}) {
       //     alert("Application fetch rest is on client side");
       // }
       console.log(currentRestaurant)
+      chooseRestaurantById(restaurantId)
+      // setCurrentRestaurant(restaurantId)
       const response = await axios.get(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+restaurantId+'/products/categories/'+categoryId,{withCredentials:true});
       console.log(response);
       const fetchedProducts = response.data;
@@ -57,6 +60,7 @@ export default function CategoryProductsPage({params}) {
   }
 
   useEffect(()=>{
+    
     fetchCategoryProducts();
   },[])
   useEffect(()=>{

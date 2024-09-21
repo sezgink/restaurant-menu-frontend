@@ -40,23 +40,26 @@ export default function Layout({ children }) {
   //   fetchRestaurants();
   // }, [setRestaurants]);
 
-  useEffect(()=>{
-    if(restaurantId!==undefined&&restaurantId!==null&&restaurantId!==""){
-      console.log({"CurrentRest":currentRestaurant})
-      if(currentRestaurant===null||currentRestaurant===undefined||currentRestaurant===-1){
-        console.log({"restaurantsAre":restaurants});
-        if(restaurants!==null){
-          setCurrentRestaurant(restaurantId)
-          // restaurants.forEach(restaurant => {
-          //   if(restaurant.id==restaurantId){
-          //     setCurrentRestaurant(restaurant);
-          //   }
-          // });
-        }
-      }
-    } else 
-    console.log("Restoran id undefined")
-  },[]);
+  // useEffect(()=>{
+  //   if(restaurantId!==undefined&&restaurantId!==null&&restaurantId!==""){
+  //     console.log({"CurrentRest":currentRestaurant})
+  //     if(currentRestaurant===null||currentRestaurant===undefined||currentRestaurant===-1){
+  //       console.log({"restaurantsAre":restaurants});
+  //       if(restaurants!==null){
+  //         setCurrentRestaurant(restaurantId)
+  //         // restaurants.forEach(restaurant => {
+  //         //   if(restaurant.id==restaurantId){
+  //         //     setCurrentRestaurant(restaurant);
+  //         //   }
+  //         // });
+  //       }
+  //     }
+  //   } else 
+  //   console.log("Restoran id undefined")
+  // },[]);
+  useEffect(()=>{console.log("Restochange");
+    console.log(currentRestaurant)
+  },[currentRestaurant]);
 
   const handleRestaurantChange = (restaurant) => {
     setCurrentRestaurant(restaurant); // Store the selected restaurant
@@ -146,7 +149,7 @@ export default function Layout({ children }) {
             </Link>
           </li>
           <li>
-            <Link href={"/admin/restaurants/"+restaurantId+"/categories"} className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left">
+            <Link href={"/admin/restaurants/"+(restaurantId?restaurantId:currentRestaurant.id)+"/categories"} className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left">
             {/* <Link href={"/admin/restaurants/"+currentRestaurant.id+"/categories"} className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left"> */}
               Categories
             </Link>

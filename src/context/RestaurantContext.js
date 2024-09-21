@@ -3,6 +3,7 @@
 
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { list } from "postcss";
 
 // Create Restaurant Context
 // export const RestaurantContext = createContext();
@@ -21,7 +22,16 @@ export function RestaurantProvider({ children }) {
     { id: 3, name: "Sushi World", icon: "🍣" },
   ];
 
-  
+  const chooseRestaurantById = async (restaurantId)=>{
+    try{
+      const found = restaurants.find((resto)=>resto.id===restaurantId);
+      if(found)
+        setCurrentRestaurant(found);
+
+    } catch(err){
+      console.log(err);
+    }
+  }
 
   // Fetch restaurants from API
   const fetchRestaurants = async () => {
@@ -61,7 +71,7 @@ export function RestaurantProvider({ children }) {
   return (
     // <RestaurantContext.Provider value={restaurants}>
     // <RestaurantContext.Provider value={contextValue}>
-    <RestaurantContext.Provider value={{ restaurants, addRestaurant,currentRestaurant,setCurrentRestaurant }}>
+    <RestaurantContext.Provider value={{ restaurants, addRestaurant,currentRestaurant,setCurrentRestaurant,chooseRestaurantById }}>
       {children}
     </RestaurantContext.Provider>
   );

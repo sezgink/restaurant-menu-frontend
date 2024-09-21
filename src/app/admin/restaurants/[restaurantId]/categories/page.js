@@ -11,7 +11,7 @@ export default function CategoriesPage({params}) {
   const [categories, setCategories] = useState([]); // Fetch from API
   const [showCreateForm, setShowCreateForm] = useState(false);
 
-  const { currentRestaurant,setCurrentRestaurant} = useContext(RestaurantContext);
+  const { currentRestaurant,setCurrentRestaurant,chooseRestaurantById} = useContext(RestaurantContext);
   const { restaurantId } = params; // Get the restaurant ID from the URL
 
 
@@ -43,7 +43,8 @@ export default function CategoriesPage({params}) {
       // } else {
       //     alert("Application fetch rest is on client side");
       // }
-      console.log(currentRestaurant)
+      // console.log(currentRestaurant)
+      chooseRestaurantById(restaurantId)
       const response = await axios.get(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+restaurantId+'/categories',{withCredentials:true});
       console.log(response);
       const fetchedCategories = response.data.filter(
@@ -56,12 +57,14 @@ export default function CategoriesPage({params}) {
 
   }
 
+  // useEffect(()=>{
+  //   fetchCategories();
+  // },[])
   useEffect(()=>{
     fetchCategories();
-  },[])
-  useEffect(()=>{
-    fetchCategories();
-  },[currentRestaurant])
+  },[restaurantId])
+  // },[restaurantId,currentRestaurant])
+  // },[currentRestaurant])
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-r from-gray-100 to-gray-300 flex flex-col items-center py-12 px-4">
