@@ -30,7 +30,7 @@ export default function CategoryProductEditForm({ onEdit,product }) {
     setValue("description",product.description);
     setValue("price",product.price);
     setValue("product_pic",product.product_pic);
-  },[]);
+  },[product]);
 
   // Handle image upload with axios
   const handleImageUpload = async (e) => {

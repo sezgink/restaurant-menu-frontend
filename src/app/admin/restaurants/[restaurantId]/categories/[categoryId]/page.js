@@ -46,22 +46,25 @@ export default function CategoryProductsPage({params}) {
     }
   };
 
-  const handleEditProduct = async (newProduct) => {
+  const handleEditProduct = async (productChanges) => {
     //restaurants/:restaurantId/categories
     console.log(currentRestaurant)
     // newCategory = {category_name:"fuck",description:"fuck"}
     // console.log(newProduct)
-    newProduct.append("category_id",categoryId);
+    
+    // productChanges.append("category_id",categoryId);
+    // productChanges.append("category_id",categoryId);
+
     try{
     // const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+currentRestaurant.id+'/products',newProduct,{withCredentials:true,headers: {
-    const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+restaurantId+'/products',newProduct,{withCredentials:true,headers: {
+    const response = await axios.patch(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+restaurantId+'/products/'+showEditForm.product.id,productChanges,{withCredentials:true,headers: {
       'Content-Type': 'application/json', // Sending JSON data
     }});
     console.log(response);
     
 
     // setCategories(fetchedCategories || []);
-    setShowCreateForm(false);
+    setShowEditForm({state:false,product:null});
     fetchCategoryProducts();
     } catch(err){
       console.log(err)
