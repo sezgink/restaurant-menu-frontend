@@ -1,6 +1,7 @@
 import { PencilSquareIcon } from '@heroicons/react/24/solid';
+import { TrashIcon } from '@heroicons/react/24/solid';
 
-export default function FoodItem({product,openProductEdit}){
+export default function FoodItem({product,openProductEdit,showDeleteDialog}){
     return(
         <div key={product.id} className="relative bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
                 <button
@@ -8,6 +9,12 @@ export default function FoodItem({product,openProductEdit}){
                 onClick={() => openProductEdit(product)}
                 >
                 Edit<PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
+                </button>
+                <button
+                className="absolute top-16 right-0 h-16 w-16 text-gray-500 hover:text-gray-700"
+                onClick={() => showDeleteDialog(product)}
+                >
+                Delete<TrashIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
                 <img
                   // src={category.image}

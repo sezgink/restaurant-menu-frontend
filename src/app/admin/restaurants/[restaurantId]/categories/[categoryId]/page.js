@@ -12,6 +12,10 @@ export default function CategoryProductsPage({params}) {
   const [products, setProducts] = useState([]); // Fetch from API
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState({state:false,product:{}});
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState({
+    state: false,
+    product: null,
+  });
 
   const { currentRestaurant,setCurrentRestaurant,chooseRestaurantById} = useContext(RestaurantContext);
 
@@ -70,6 +74,27 @@ export default function CategoryProductsPage({params}) {
       console.log(err)
     }
   };
+
+  const handleDeleteProduct = async (product_id) => {
+    try{
+    // const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+currentRestaurant.id+'/products',newProduct,{withCredentials:true,headers: {
+    const response = await axios.delete(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+restaurantId+'/products/'+product_id,{withCredentials:true,headers: {
+      'Content-Type': 'application/json', // Sending JSON data
+    }});
+    console.log(response);
+    
+
+    // setCategories(fetchedCategories || []);
+    setShowDeleteConfirmation({state:false,product:null});
+    fetchCategoryProducts();
+    } catch(err){
+      console.log(err)
+    }
+  };
+
+  const showDeleteDialog = (product) => {
+    setShowDeleteConfirmation({ state: true, product });
+  };
   
 
   const fetchCategoryProducts = async ()=>{
@@ -110,7 +135,7 @@ export default function CategoryProductsPage({params}) {
         {products.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 w-full max-w-7xl">
             {products.map((product) => (
-              <FoodItem product={product} key={product.id} openProductEdit={openProductEdit}></FoodItem>
+              <FoodItem product={product} key={product.id} openProductEdit={openProductEdit} showDeleteDialog={showDeleteDialog}></FoodItem>
             ))}
           </div>
         ) : (
@@ -138,6 +163,32 @@ export default function CategoryProductsPage({params}) {
         {showEditForm.state && (
           <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
             <CategoryProductEditForm onEdit={handleEditProduct} product={showEditForm.product} />
+          </div>
+        )}
+
+         {/* Confirmation Dialog for Deleting Product */}
+         {showDeleteConfirmation.state && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300">
+            <div className="bg-white p-8 rounded-lg shadow-2xl max-w-md w-full transform transition-transform duration-300 scale-100">
+              <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+                Are you sure you want to delete{" "}
+                <span className="text-red-600">{showDeleteConfirmation.product.name}</span>?
+              </h3>
+              <div className="flex justify-center gap-4 mt-6">
+                <button
+                  onClick={() => setShowDeleteConfirmation({ state: false, product: null })}
+                  className="px-6 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all duration-200"
+                >
+                  No
+                </button>
+                <button
+                  onClick={() => handleDeleteProduct(showDeleteConfirmation.product.id)}
+                  className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 transition-all duration-200"
+                >
+                  Yes
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
