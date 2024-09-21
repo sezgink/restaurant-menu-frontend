@@ -16,7 +16,12 @@ export default function FoodItem({product,openProductEdit}){
                   className="w-40 h-40 object-cover mb-4 rounded-md shadow-md"
                   // className="w-40 h-40 object-cover mb-4 rounded-full shadow-md"
                 />
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">{product.product_name}</h3>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">{product.name}</h3>
+                <h4 className="text-xl font-bold text-gray-800 mb-2">Price:{product.price}</h4>
+                {(product.is_dumping==1)&&
+                (<>  <h4 className="text-xl font-bold text-gray-800 mb-2">In dumping</h4>
+                <h4 className="text-xl font-bold text-gray-800 mb-2">OldPrice:{product.old_price}</h4></>)}
+                
                 <p className="text-gray-600 text-center">{product.description}</p>
               </div>
     );
