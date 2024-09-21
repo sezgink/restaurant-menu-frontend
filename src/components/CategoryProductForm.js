@@ -11,6 +11,7 @@ export default function CategoryProductForm({ onCreate }) {
   const [imageName, setImageName] = useState(null); // Store the image name after upload
   const [uploadState, setUploadState] = useState(null); // Manage upload state
   const [uploadProgress, setUploadProgress] = useState(0); // Track upload progress
+  const [isDumping, setIsDumping] = useState(false);
 
   // Handle main form submission
   const onSubmit = (data) => {
@@ -18,6 +19,11 @@ export default function CategoryProductForm({ onCreate }) {
     formData.append("name", data.name);
     formData.append("description", data.description);
     formData.append("price", data.price);
+    if(isDumping){
+      formData.append("old_price", data.old_price);
+      formData.append("is_dumping", 1);
+    }
+    
     if(imageName!==""&&imageName!=null&&imageName!==undefined){
       formData.append("product_pic", imageName); // Add the image name to the form data
     }
@@ -96,10 +102,9 @@ export default function CategoryProductForm({ onCreate }) {
       {/* Price */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Product Price</label>
-        <textarea
+        <input
           name="price"
           placeholder="Enter price"
-          rows="4"
           className={`block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
             errors.description ? "border-red-500" : ""
           } text-black bg-white`}
@@ -107,6 +112,40 @@ export default function CategoryProductForm({ onCreate }) {
         />
         {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price.message}</p>}
       </div>
+
+      {/* Is Dumping Checkbox */}
+      <div>
+        <label className="text-sm font-medium text-gray-700 mb-1">Is Dumping</label>
+        <input type="checkbox" className="ml-30vw p-3 border border-gray-300 rounded-md" name="is_dumping" checked={isDumping} onChange={()=>{setIsDumping((isDumping)=>!isDumping)}}
+        // <input type="checkbox" className="ml-30vw p-3 border border-gray-300 rounded-md" name="is_dumping" {...register("is_dumping", { required: "Price is required" })}
+        ></input>
+        {/* <textarea
+          name="price"
+          placeholder="Enter price"
+          rows="4"
+          className={`block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+            errors.description ? "border-red-500" : ""
+          } text-black bg-white`}
+          {...register("price", { required: "Price is required" })}
+        /> */}
+        {errors.is_dumping && <p className="text-red-500 text-sm mt-1">{errors.is_dumping.message}</p>}
+      </div>
+
+      {/* Old Price */}
+      {isDumping && (<div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Product Old Price</label>
+        <input
+          name="old_price"
+          placeholder="Enter old price"
+          rows="4"
+          className={`block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+            errors.description ? "border-red-500" : ""
+          } text-black bg-white`}
+          {...register("old_price")}
+        />
+        {errors.old_price && <p className="text-red-500 text-sm mt-1">{errors.old_price.message}</p>}
+      </div>)}
+      
 
       {/* Image Upload Form */}
       <div>
