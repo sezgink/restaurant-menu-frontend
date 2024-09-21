@@ -21,7 +21,7 @@ export default function CategoryProductsPage({params}) {
   const openProductEdit = async (product) =>{
     // showEditForm.product = product;
     // setShowEditForm(true);
-    setShowCreateForm({state:true,product})
+    setShowEditForm({state:true,product})
 
   }
   const handleCreateProduct = async (newProduct) => {

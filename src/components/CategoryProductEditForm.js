@@ -140,8 +140,6 @@ export default function CategoryProductEditForm({ onEdit,product }) {
       {imageName && (
         <>
           <p className="text-green-500">Image uploaded successfully</p>
-
-          
         </>
       )}
       {/* Submit Button */}
