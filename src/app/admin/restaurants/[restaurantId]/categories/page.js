@@ -6,6 +6,7 @@ import CategoryForm from "../../../../../components/CategoryForm";
 import { RestaurantContext } from "@/context/RestaurantContext";
 import axios from "axios";
 import Link from "next/link";
+import CategoryItem from "@/components/CategoryItem";
 
 export default function CategoriesPage({params}) {
   const [categories, setCategories] = useState([]); // Fetch from API
@@ -74,20 +75,21 @@ export default function CategoriesPage({params}) {
         {categories.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 w-full max-w-7xl">
             {categories.map((category) => (
-              <div key={category.id} className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
-                <Link href={`/admin/restaurants/${restaurantId}/categories/${category.id}`}>
-                {/* <Link href={`/admin/categories/${category.id}`}> */}
-                <img
-                  // src={category.image}
-                  src={process.env.NEXT_PUBLIC_API_URL+'/uploads/' +category.category_pic}
-                  alt={category.name}
-                  className="w-40 h-40 object-cover mb-4 rounded-md shadow-md"
-                  // className="w-40 h-40 object-cover mb-4 rounded-full shadow-md"
-                />
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">{category.category_name}</h3>
-                <p className="text-gray-600 text-center">{category.description}</p>
-                </Link>
-              </div>
+              // <div key={category.id} className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
+              //   <Link href={`/admin/restaurants/${restaurantId}/categories/${category.id}`}>
+              //   {/* <Link href={`/admin/categories/${category.id}`}> */}
+              //   <img
+              //     // src={category.image}
+              //     src={process.env.NEXT_PUBLIC_API_URL+'/uploads/' +category.category_pic}
+              //     alt={category.name}
+              //     className="w-40 h-40 object-cover mb-4 rounded-md shadow-md"
+              //     // className="w-40 h-40 object-cover mb-4 rounded-full shadow-md"
+              //   />
+              //   <h3 className="text-2xl font-bold text-gray-800 mb-2">{category.category_name}</h3>
+              //   <p className="text-gray-600 text-center">{category.description}</p>
+              //   </Link>
+              // </div>
+              <CategoryItem key={category.id} category={category} href={`/admin/restaurants/${restaurantId}/categories/${category.id}`} />
             ))}
           </div>
         ) : (
