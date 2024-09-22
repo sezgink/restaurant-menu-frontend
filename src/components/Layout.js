@@ -12,7 +12,7 @@ import { redirect,usePathname } from 'next/navigation'
 export default function Layout({ children }) {
   const [isRestaurantDropdownOpen, setIsRestaurantDropdownOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const { restaurants, addRestaurant, currentRestaurant, setCurrentRestaurant } = useContext(RestaurantContext);
+  const { restaurants, addRestaurant, currentRestaurant, setCurrentRestaurant,chooseRestaurantById } = useContext(RestaurantContext);
   const { user,loggedOut } = useContext(AuthContext);
 
   const { push } = useRouter();
@@ -64,7 +64,12 @@ export default function Layout({ children }) {
   },[currentRestaurant]);
 
   useEffect(()=>{
-    console.log("Layout can read params:"+restaurantId)
+    // console.log("Layout can read params:"+restaurantId)
+    if(currentRestaurant===-1){
+      console.log("Lets go")
+      chooseRestaurantById(restaurantId);
+
+    }
 
   },[restaurantId])
 

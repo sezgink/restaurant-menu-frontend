@@ -24,6 +24,17 @@ export function RestaurantProvider({ children }) {
 
   const chooseRestaurantById = async (restaurantId)=>{
     try{
+      if(restaurantId===undefined&&restaurantId===null)
+        return;
+      if(restaurants.length===0){
+        const fetchedRestaurants = await fetchRestaurantsWithReturn();
+        const found = fetchedRestaurants.find((resto)=>String(resto.id)===restaurantId);
+        console.log({found})
+        if(found)
+          setCurrentRestaurant(found);
+        return;
+      }
+      console.log(restaurants)
       const found = restaurants.find((resto)=>resto.id===restaurantId);
       if(found)
         setCurrentRestaurant(found);
@@ -32,6 +43,26 @@ export function RestaurantProvider({ children }) {
       console.log(err);
     }
   }
+
+  const fetchRestaurantsWithReturn = async () => {
+    try {
+    //   if (typeof window == "undefined") {
+    //     console.log("Application fetch restnis on server side");
+    // } else {
+    //     alert("Application fetch rest is on client side");
+    // }
+      const response = await axios.get(process.env.NEXT_PUBLIC_API_URL+"/api/restaurants",{withCredentials:true});
+      console.log("Method with return")
+      console.log(response)
+      
+      setRestaurants(response.data || []);
+      return response.data || [];
+      // setRestaurants(restaurantsMock);
+    } catch (error) {
+      console.error("Failed to fetch restaurants:", error);
+    }
+  };
+
 
   // Fetch restaurants from API
   const fetchRestaurants = async () => {
@@ -63,6 +94,7 @@ export function RestaurantProvider({ children }) {
   };
 
   useEffect(() => {
+    console.log("Fetching restaurants on mount")
     fetchRestaurants(); // Fetch restaurants on mount
   }, []);
 
