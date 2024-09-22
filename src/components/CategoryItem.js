@@ -7,13 +7,13 @@ export default function CategoryItem({category,openCategoryEdit,showDeleteDialog
         <div key={category.id} className="relative bg-white shadow-lg rounded-lg p-4 flex flex-col items-center" href={href}>
                 <button
                 className="absolute top-0 right-0 h-16 w-16 text-gray-500 hover:text-gray-700"
-                onClick={() => openProductEdit(product)}
+                onClick={() => openCategoryEdit(category)}
                 >
                 Edit<PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
                 <button
                 className="absolute top-16 right-0 h-16 w-16 text-gray-500 hover:text-gray-700"
-                onClick={() => showDeleteDialog(product)}
+                onClick={() => showDeleteDialog(category)}
                 >
                 Delete<TrashIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
