@@ -18,7 +18,6 @@ export default function CategoryEditForm({ onEdit,category,cancelEditForm }) {
     formData.append("description", data.description);
     if(imageName!==""&&imageName!=null&&imageName!==undefined){
       formData.append("category_pic", imageName); // Add the image name to the form data
-
     }
 
     onEdit(formData); // Send form data to the onCreate handler

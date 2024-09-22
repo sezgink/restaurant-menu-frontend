@@ -3,10 +3,11 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import axios from "axios";
+import { XCircleIcon } from "@heroicons/react/24/solid";
 
 
 
-export default function CategoryForm({ onCreate }) {
+export default function CategoryForm({ onCreate,cancelCreateForm }) {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const [imageName, setImageName] = useState(null); // Store the image name after upload
   const [uploadState, setUploadState] = useState(null); // Manage upload state
@@ -65,7 +66,14 @@ export default function CategoryForm({ onCreate }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
       {/* Category Name */}
-      <div>
+      <div className="relative"> 
+      <button
+                // className="absolute top-0 right-0 h-16 w-16 text-gray-500 hover:text-gray-700"
+                className="absolute -top-4 right-4 h-1 w-1 text-red-500 hover:text-red-700"
+                onClick={() => cancelCreateForm()}
+                >
+                <XCircleIcon className="h-8 w-8" aria-hidden="true" />
+                </button>
         <label className="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
         <input
           name="category_name"
@@ -94,7 +102,7 @@ export default function CategoryForm({ onCreate }) {
       </div>
 
       {/* Image Upload Form */}
-      <div>
+      <div> 
         <label className="block text-sm font-medium text-gray-700 mb-1">Category Image</label>
         <input
           type="file"

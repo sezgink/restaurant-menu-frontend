@@ -93,6 +93,9 @@ export default function CategoriesPage({params}) {
   const cancelEditForm = () => {
     setShowEditForm({state:false,category:null})
   }
+  const cancelCreateForm = () => {
+    setShowCreateForm(false)
+  }
 
   const fetchCategories = async ()=>{
     try {
@@ -165,7 +168,7 @@ export default function CategoriesPage({params}) {
         {/* Create Category Form */}
         {showCreateForm && (
           <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
-            <CategoryForm onCreate={handleCreateCategory} />
+            <CategoryForm onCreate={handleCreateCategory} cancelCreateForm={cancelCreateForm} />
           </div>
         )}
 
