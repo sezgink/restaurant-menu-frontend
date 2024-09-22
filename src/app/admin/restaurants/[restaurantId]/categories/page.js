@@ -8,6 +8,7 @@ import axios from "axios";
 import Link from "next/link";
 import CategoryItem from "@/components/CategoryItem";
 import CategoryEditForm from "@/components/CategoryEditForm";
+import { set } from "react-hook-form";
 
 export default function CategoriesPage({params}) {
   const [categories, setCategories] = useState([]); // Fetch from API
@@ -26,6 +27,7 @@ export default function CategoriesPage({params}) {
     // showEditForm.product = product;
     // setShowEditForm(true);
     setShowEditForm({state:true,category})
+    setShowCreateForm(false);
 
   }
   const handleCreateCategory = async (newCategory) => {
@@ -88,6 +90,10 @@ export default function CategoriesPage({params}) {
     setShowDeleteConfirmation({ state: true, category });
   };
 
+  const cancelEditForm = () => {
+    setShowEditForm({state:false,category:null})
+  }
+
   const fetchCategories = async ()=>{
     try {
       chooseRestaurantById(restaurantId)
@@ -147,7 +153,9 @@ export default function CategoriesPage({params}) {
         {/* Create Category Button */}
         {!showCreateForm && (
           <button
-            onClick={() => setShowCreateForm(true)}
+            onClick={() => {setShowCreateForm(true);
+              setShowEditForm(false,null);
+            }}
             className="bg-indigo-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-200"
           >
             Create Category
@@ -164,7 +172,8 @@ export default function CategoriesPage({params}) {
         {/* Edit Category Form */}
         {showEditForm.state && (
           <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
-            <CategoryEditForm onEdit={handleEditCategory} category={showEditForm.category} />
+            <CategoryEditForm onEdit={handleEditCategory} category={showEditForm.category} 
+            cancelEditForm={cancelEditForm} />
           </div>
         )}
 

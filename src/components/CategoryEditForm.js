@@ -5,7 +5,7 @@ import { useState,useEffect } from "react";
 import axios from "axios";
 import { XCircleIcon } from "@heroicons/react/24/solid";
 
-export default function CategoryEditForm({ onEdit,category }) {
+export default function CategoryEditForm({ onEdit,category,cancelEditForm }) {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const [imageName, setImageName] = useState(null); // Store the image name after upload
   const [uploadState, setUploadState] = useState(null); // Manage upload state
