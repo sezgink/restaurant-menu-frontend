@@ -1,11 +1,13 @@
 // src/components/Layout.js
 
 import Link from "next/link";
-import { redirect } from 'next/navigation'
 import { useState, useContext, useEffect } from "react";
 import { RestaurantContext } from '../context/RestaurantContext.js';
 import { AuthContext } from "@/context/AuthContext.js"; 
 import { useRouter,useParams } from 'next/navigation';
+import { redirect,usePathname } from 'next/navigation'
+
+
 
 export default function Layout({ children }) {
   const [isRestaurantDropdownOpen, setIsRestaurantDropdownOpen] = useState(false);
@@ -15,8 +17,8 @@ export default function Layout({ children }) {
 
   const { push } = useRouter();
   const {restaurantId} = useParams();
+  const pathname = usePathname();
   // const {restaurantId} = query ||{};
-  
 
   // Mock restaurant data with icons
   const restaurantsMock = [
@@ -61,9 +63,19 @@ export default function Layout({ children }) {
     console.log(currentRestaurant)
   },[currentRestaurant]);
 
+  useEffect(()=>{
+    console.log("Layout can read params:"+restaurantId)
+
+  },[restaurantId])
+
   const handleRestaurantChange = (restaurant) => {
+    
     setCurrentRestaurant(restaurant); // Store the selected restaurant
     setIsRestaurantDropdownOpen(false); // Close the dropdown after selection
+    if(restaurantId!==null&&restaurantId!==undefined){
+      const newPath=pathname.replace('restaurants/'+restaurantId,'restaurants/'+restaurant.id);
+      push(newPath);
+    }
   };
 
   const handleLogout = async () => {
