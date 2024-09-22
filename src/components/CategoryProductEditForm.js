@@ -198,7 +198,7 @@ export default function CategoryProductEditForm({ onEdit,product }) {
             type="submit"
             className="bg-indigo-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-200"
           >
-            Edit Product
+            Update Product
           </button>
     </form>
   );
