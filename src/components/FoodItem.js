@@ -5,13 +5,15 @@ export default function FoodItem({ product, openProductEdit, showDeleteDialog })
   return (
     <div
       key={product.id}
-      className="relative bg-white shadow-lg rounded-lg p-4 flex items-center space-x-4 w-full"
+      className="relative bg-white shadow-lg rounded-lg p-4 flex items-start space-x-4 w-full"
     >
-      <img
-        src={process.env.NEXT_PUBLIC_API_URL + '/uploads/' + product.product_pic}
-        alt={product.name}
-        className="w-20 h-20 object-cover rounded-md shadow-md"
-      />
+       <div className="flex flex-col">
+        <img
+          src={process.env.NEXT_PUBLIC_API_URL + '/uploads/' + product.product_pic}
+          alt={product.name}
+          className="w-20 h-20 object-cover rounded-md shadow-md flex-start"
+        />
+      </div>
 
       <div className="flex flex-col flex-1">
         <h3 className="text-lg text-gray-800">Name:</h3>
