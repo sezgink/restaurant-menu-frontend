@@ -133,7 +133,7 @@ export default function CategoryProductsPage({params}) {
 
         {/* Categories Grid */}
         {products.length > 0 ? (
-          <div className="grid gap-6 mb-8 w-full max-w-7xl">
+          <div className="grid gap-3 mb-8 w-full max-w-7xl">
             {products.map((product) => (
               <FoodItem product={product} key={product.id} openProductEdit={openProductEdit} showDeleteDialog={showDeleteDialog}></FoodItem>
             ))}
