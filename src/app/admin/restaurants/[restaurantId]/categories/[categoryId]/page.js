@@ -7,6 +7,7 @@ import { RestaurantContext } from "@/context/RestaurantContext";
 import axios from "axios";
 import FoodItem from "@/components/FoodItem";
 import CategoryProductEditForm from "@/components/CategoryProductEditForm";
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 export default function CategoryProductsPage({params}) {
   const [products, setProducts] = useState([]); // Fetch from API
@@ -22,12 +23,43 @@ export default function CategoryProductsPage({params}) {
   const { categoryId,restaurantId } = params; // Get the restaurant ID from the URL
 
 
+  function handleOnDragEnd(result) {
+    if (!result.destination) return;
+  
+    const items = Array.from(products);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+  
+    setProducts(items);
+  
+    // Send the new order to the backend
+    const newOrder = items.map((product) => product.id);
+    updateProductOrder(newOrder);
+  }
+  async function updateProductOrder(newOrder) {
+    try {
+      await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/restaurants/${restaurantId}/products/order`,
+        {
+          products: newOrder,
+        },
+        { withCredentials: true }
+      );
+  
+      // Optionally, fetch the products again to ensure the order is correct
+      fetchCategoryProducts();
+    } catch (err) {
+      console.error('Failed to update product order:', err);
+    }
+  }
+    
   const openProductEdit = async (product) =>{
     // showEditForm.product = product;
     // setShowEditForm(true);
     setShowEditForm({state:true,product})
 
   }
+
   const handleCreateProduct = async (newProduct) => {
     //restaurants/:restaurantId/categories
     console.log(currentRestaurant)
@@ -133,11 +165,30 @@ export default function CategoryProductsPage({params}) {
 
         {/* Categories Grid */}
         {products.length > 0 ? (
-          <div className="grid gap-3 mb-8 w-full max-w-7xl">
-            {products.map((product) => (
-              <FoodItem product={product} key={product.id} openProductEdit={openProductEdit} showDeleteDialog={showDeleteDialog}></FoodItem>
-            ))}
-          </div>
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+          <Droppable droppableId="products">
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef} className="grid gap-3 mb-8 w-full max-w-7x">
+                {products.map((product, index) => (
+                  <Draggable key={product.id.toString()} draggableId={product.id.toString()} index={index}>
+                    {(provided) => (
+                      <div
+                        className="product-item "
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <FoodItem product={product} openProductEdit={openProductEdit} showDeleteDialog={showDeleteDialog} />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+        
         ) : (
           <p className="text-lg text-gray-600 mb-8 text-center">No produts available on this category. Please create one.</p>
         )}
