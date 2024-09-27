@@ -315,7 +315,7 @@ export default function CategoryProductsPage({params}) {
         {/* Create Product Form */}
         {showCreateForm && (
           <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
-            <CategoryProductForm onCreate={handleCreateProduct} />
+            <CategoryProductForm onCreate={handleCreateProduct} cancelCreateForm={cancelForm} />
           </div>
         )}
 
@@ -343,7 +343,8 @@ export default function CategoryProductsPage({params}) {
         {/* Edit Product Form */}
         {showEditForm.state && (
           <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
-            <CategoryProductEditForm onEdit={handleEditProduct} product={showEditForm.product} />
+            <CategoryProductEditForm onEdit={handleEditProduct} 
+            product={showEditForm.product} cancelCreateForm={cancelForm} />
           </div>
         )}
 
