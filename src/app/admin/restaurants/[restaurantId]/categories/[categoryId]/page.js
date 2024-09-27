@@ -10,12 +10,14 @@ import CategoryProductEditForm from "@/components/CategoryProductEditForm";
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import SubtitleItem from "@/components/SubtitleItem";
 import SubcategoryCreateForm from "@/components/SubcategoryCreateForm";
+import SubcategoryEditForm from "@/components/SubcategoryEditForm";
 
 export default function CategoryProductsPage({params}) {
   const [products, setProducts] = useState([]); // Fetch from API
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showSubcategoryCreateForm, setShowSubcategoryCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState({state:false,product:{}});
+  const [showSubEditForm, setShowSubEditForm] = useState({state:false,product:{}});
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState({
     state: false,
     product: null,
@@ -99,6 +101,12 @@ export default function CategoryProductsPage({params}) {
     setShowEditForm({state:true,product})
 
   }
+  const openSubEdit = async (product) =>{
+    // showEditForm.product = product;
+    // setShowEditForm(true);
+    setShowSubEditForm({state:true,product})
+
+  }
 
   const handleCreateProduct = async (newProduct) => {
     //restaurants/:restaurantId/categories
@@ -143,7 +151,7 @@ export default function CategoryProductsPage({params}) {
     // setCategories(fetchedCategories || []);
     setShowCreateForm(false);
     setShowSubcategoryCreateForm(false);
-    
+
     fetchCategoryProducts();
     } catch(err){
       console.log(err)
@@ -175,6 +183,32 @@ export default function CategoryProductsPage({params}) {
 
     // setCategories(fetchedCategories || []);
     setShowEditForm({state:false,product:null});
+    fetchCategoryProducts();
+    } catch(err){
+      console.log(err)
+    }
+  };
+
+  const handleEditSub = async (productChanges) => {
+    //restaurants/:restaurantId/categories
+    console.log(currentRestaurant)
+    // newCategory = {category_name:"fuck",description:"fuck"}
+    // console.log(newProduct)
+    
+    // productChanges.append("category_id",categoryId);
+    // productChanges.append("category_id",categoryId);
+
+    try{
+    // const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+currentRestaurant.id+'/products',newProduct,{withCredentials:true,headers: {
+    // const response = await axios.patch(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+restaurantId+'/products/'+showEditForm.product.id,productChanges,{withCredentials:true,headers: {
+    const response = await axios.patch(process.env.NEXT_PUBLIC_API_URL+'/api/subcategories/'+showSubEditForm.product.id,productChanges,{withCredentials:true,headers: {
+      'Content-Type': 'application/json', // Sending JSON data
+    }});
+    console.log(response);
+    
+
+    // setCategories(fetchedCategories || []);
+    setShowSubEditForm({state:false,product:null});
     fetchCategoryProducts();
     } catch(err){
       console.log(err)
@@ -288,7 +322,7 @@ export default function CategoryProductsPage({params}) {
                         {(product.listType===0)?                        
                         <FoodItem product={product} openProductEdit={openProductEdit} 
                         showDeleteDialog={showDeleteDialog} /> : 
-                        <SubtitleItem product={product} openProductEdit={openProductEdit} 
+                        <SubtitleItem product={product} openProductEdit={openSubEdit} 
                         showDeleteDialog={showSubDeleteDialog} />}
                       </div>
                     )}
@@ -347,6 +381,14 @@ export default function CategoryProductsPage({params}) {
           <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
             <CategoryProductEditForm onEdit={handleEditProduct} 
             product={showEditForm.product} cancelCreateForm={cancelForm} />
+          </div>
+        )}
+
+        {/* Edit Product Form */}
+        {showSubEditForm.state && (
+          <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
+            <SubcategoryEditForm onEdit={handleEditSub} cancelEditForm={cancelForm} 
+            category={showEditForm.product} cancelCreateForm={cancelForm} />
           </div>
         )}
 
