@@ -142,6 +142,8 @@ export default function CategoryProductsPage({params}) {
 
     // setCategories(fetchedCategories || []);
     setShowCreateForm(false);
+    setShowSubcategoryCreateForm(false);
+    
     fetchCategoryProducts();
     } catch(err){
       console.log(err)
