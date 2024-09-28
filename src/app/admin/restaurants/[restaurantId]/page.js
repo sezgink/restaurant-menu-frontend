@@ -4,12 +4,15 @@
 
 // src/app/admin/restaurants/[id]/page.js
 
-import { useState } from 'react';
+import { useState,useContext } from 'react';
 import Layout from '../../../../components/Layout';
+import { RestaurantContext } from '@/context/RestaurantContext';
 
 export default function RestaurantProfilePage({ params }) {
   const { restaurantId } = params; // Get the restaurant ID from the URL
   const [activeTab, setActiveTab] = useState('categories'); // Default tab
+  const { currentRestaurant,setCurrentRestaurant,chooseRestaurantById} = useContext(RestaurantContext);
+
 
   // Dummy data for categories and products
   const categories = [
@@ -22,55 +25,39 @@ export default function RestaurantProfilePage({ params }) {
     { id: 2, name: "Salad", category: "Appetizers" },
   ];
 
+  const fetchRestaurant = async ()=>{
+    try {
+      //TODO if restaurant id null, return to homepage
+      // chooseRestaurantById(restaurantId)
+    
+      
+      const response = await axios.get(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+restaurantId+'/categories',{withCredentials:true});
+      console.log(response);
+      const fetchedCategories = response.data.filter(
+        (category) => category.category_name.trim().toLowerCase() !== "uncategorized" );
+        setCategories(fetchedCategories || []);
+        // setRestaurants(restaurantsMock);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+  }
+
   return (
     <Layout>
       <div className="container mx-auto p-6">
-        <h2 className="text-3xl font-bold mb-6">Restaurant Profile (ID: {restaurantId})</h2>
+      <img
+                    // src={category.image}
+                    src={process.env.NEXT_PUBLIC_API_URL+'/uploads/' +currentRestaurant.profile_pic}
+                    alt={currentRestaurant.name}
+                    className="w-40 h-40 object-cover rounded-md shadow-md"
+                    // className="w-40 h-40 object-cover rounded-md shadow-md flex-start"
+                    // className="w-40 h-40 object-cover mb-4 rounded-full shadow-md"
+                  />
+        <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-8">Restaurant Profile (ID: {restaurantId})</h2>
+        <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Restaurant Name : {currentRestaurant.name}</h2>
+        <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">About Restaurant : {currentRestaurant.description}</h2>
 
-        {/* Tab Navigation */}
-        <div className="flex space-x-4 border-b mb-4">
-          <button
-            onClick={() => setActiveTab('categories')}
-            className={`px-4 py-2 ${activeTab === 'categories' ? 'border-b-2 border-indigo-600 text-indigo-600' : 'text-gray-600'}`}
-          >
-            Categories
-          </button>
-          <button
-            onClick={() => setActiveTab('products')}
-            className={`px-4 py-2 ${activeTab === 'products' ? 'border-b-2 border-indigo-600 text-indigo-600' : 'text-gray-600'}`}
-          >
-            Products
-          </button>
-        </div>
-
-        {/* Dynamic Tab Content */}
-        <div>
-          {activeTab === 'categories' && (
-            <div>
-              <h3 className="text-xl font-bold mb-4">Categories</h3>
-              <ul>
-                {categories.map((category) => (
-                  <li key={category.id} className="mb-2">
-                    {category.name}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {activeTab === 'products' && (
-            <div>
-              <h3 className="text-xl font-bold mb-4">Products</h3>
-              <ul>
-                {products.map((product) => (
-                  <li key={product.id} className="mb-2">
-                    {product.name}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+        
       </div>
     </Layout>
   );
