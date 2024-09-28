@@ -9,6 +9,8 @@ import Link from "next/link";
 import CategoryItem from "@/components/CategoryItem";
 import CategoryEditForm from "@/components/CategoryEditForm";
 import { set } from "react-hook-form";
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+
 
 export default function CategoriesPage({params}) {
   const [categories, setCategories] = useState([]); // Fetch from API
@@ -22,6 +24,39 @@ export default function CategoriesPage({params}) {
   const { currentRestaurant,setCurrentRestaurant,chooseRestaurantById} = useContext(RestaurantContext);
   const { restaurantId } = params; // Get the restaurant ID from the URL
 
+
+  function handleOnDragEnd(result) {
+    if (!result.destination) return;
+
+    const items = Array.from(categories);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setCategories(items)
+
+    const categoriesToOrder=[]
+    items.map((category,index) => {
+        categoriesToOrder.push({'categoryId':category.id,'row_order':index})
+    });
+    updateCategoryOrder(categoriesToOrder);
+
+  }
+  async function updateCategoryOrder(categories) {
+    try {
+      await axios.patch(
+        // `${process.env.NEXT_PUBLIC_API_URL}/api/restaurants/${restaurantId}/products/reorder`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/restaurants/${restaurantId}/reorder/categories`,
+        categories,
+        { withCredentials: true }
+      );
+
+  
+      // Optionally, fetch the products again to ensure the order is correct
+      fetchCategories();
+    } catch (err) {
+      console.error('Failed to update category order:', err);
+    }
+  }
 
   const openCategoryEdit = async (category) =>{
     // showEditForm.product = product;
@@ -127,28 +162,45 @@ export default function CategoriesPage({params}) {
 
         {/* Categories Grid */}
         {categories.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 w-full max-w-7xl">
+          //Old card version of categories
+          // <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 w-full max-w-7xl">
+          <>
+          {/* <div className="grid grid-cols-1 gap-6 mb-8 w-full max-w-7xl">
             {categories.map((category) => (
-              // <div key={category.id} className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
-              //   <Link href={`/admin/restaurants/${restaurantId}/categories/${category.id}`}>
-              //   {/* <Link href={`/admin/categories/${category.id}`}> */}
-              //   <img
-              //     // src={category.image}
-              //     src={process.env.NEXT_PUBLIC_API_URL+'/uploads/' +category.category_pic}
-              //     alt={category.name}
-              //     className="w-40 h-40 object-cover mb-4 rounded-md shadow-md"
-              //     // className="w-40 h-40 object-cover mb-4 rounded-full shadow-md"
-              //   />
-              //   <h3 className="text-2xl font-bold text-gray-800 mb-2">{category.category_name}</h3>
-              //   <p className="text-gray-600 text-center">{category.description}</p>
-              //   </Link>
-              // </div>
               <CategoryItem key={category.id} 
               category={category} 
               openCategoryEdit={openCategoryEdit} showDeleteDialog={showDeleteDialog}
               href={`/admin/restaurants/${restaurantId}/categories/${category.id}`} />
             ))}
-          </div>
+          </div> */}
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+          <Droppable droppableId="categories">
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef} className="grid gap-3 mb-8 w-full max-w-7x">
+                {categories.map((category, index) => (
+                  <Draggable key={category.id.toString()} draggableId={category.id.toString()} index={index}>
+                    {(provided) => (
+                      <div
+                        className="category-item "
+                        // className="product-item "
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                         <CategoryItem key={category.id} 
+                          category={category} 
+                          openCategoryEdit={openCategoryEdit} showDeleteDialog={showDeleteDialog}
+                          href={`/admin/restaurants/${restaurantId}/categories/${category.id}`} />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+        </>
         ) : (
           <p className="text-lg text-gray-600 mb-8 text-center">No categories available. Please create one.</p>
         )}
