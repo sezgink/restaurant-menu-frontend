@@ -1,20 +1,24 @@
 // src/components/Layout.js
 
 import Link from "next/link";
-import { redirect } from 'next/navigation'
 import { useState, useContext, useEffect } from "react";
 import { RestaurantContext } from '../context/RestaurantContext.js';
 import { AuthContext } from "@/context/AuthContext.js"; 
-import { useRouter } from 'next/navigation';
+import { useRouter,useParams } from 'next/navigation';
+import { redirect,usePathname } from 'next/navigation'
+
+
 
 export default function Layout({ children }) {
   const [isRestaurantDropdownOpen, setIsRestaurantDropdownOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const { restaurants, addRestaurant, currentRestaurant, setCurrentRestaurant } = useContext(RestaurantContext);
+  const { restaurants, addRestaurant, currentRestaurant, setCurrentRestaurant,chooseRestaurantById } = useContext(RestaurantContext);
   const { user,loggedOut } = useContext(AuthContext);
 
   const { push } = useRouter();
-  
+  const {restaurantId} = useParams();
+  const pathname = usePathname();
+  // const {restaurantId} = query ||{};
 
   // Mock restaurant data with icons
   const restaurantsMock = [
@@ -38,9 +42,45 @@ export default function Layout({ children }) {
   //   fetchRestaurants();
   // }, [setRestaurants]);
 
+  // useEffect(()=>{
+  //   if(restaurantId!==undefined&&restaurantId!==null&&restaurantId!==""){
+  //     console.log({"CurrentRest":currentRestaurant})
+  //     if(currentRestaurant===null||currentRestaurant===undefined||currentRestaurant===-1){
+  //       console.log({"restaurantsAre":restaurants});
+  //       if(restaurants!==null){
+  //         setCurrentRestaurant(restaurantId)
+  //         // restaurants.forEach(restaurant => {
+  //         //   if(restaurant.id==restaurantId){
+  //         //     setCurrentRestaurant(restaurant);
+  //         //   }
+  //         // });
+  //       }
+  //     }
+  //   } else 
+  //   console.log("Restoran id undefined")
+  // },[]);
+  useEffect(()=>{console.log("Restochange");
+    console.log(currentRestaurant)
+  },[currentRestaurant]);
+
+  useEffect(()=>{
+    // console.log("Layout can read params:"+restaurantId)
+    if(currentRestaurant===-1){
+      console.log("Lets go")
+      chooseRestaurantById(restaurantId);
+
+    }
+
+  },[restaurantId])
+
   const handleRestaurantChange = (restaurant) => {
+    
     setCurrentRestaurant(restaurant); // Store the selected restaurant
     setIsRestaurantDropdownOpen(false); // Close the dropdown after selection
+    if(restaurantId!==null&&restaurantId!==undefined){
+      const newPath=pathname.replace('restaurants/'+restaurantId,'restaurants/'+restaurant.id);
+      push(newPath);
+    }
   };
 
   const handleLogout = async () => {
@@ -55,7 +95,7 @@ export default function Layout({ children }) {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Top Bar */}
-      <header className="fixed top-0 left-0 w-full bg-gray-800 text-white flex justify-between items-center h-16 px-6 z-50">
+      <header className="fixed top-0 left-0 w-full bg-gray-900 text-white flex justify-between items-center h-16 px-6 z-50 ">
         {/* Left Side: App name or Logo */}
         <div className="flex items-center">
           <h2 className="text-2xl font-bold">Menu Studio</h2>
@@ -126,7 +166,8 @@ export default function Layout({ children }) {
             </Link>
           </li>
           <li>
-            <Link href="/admin/categories" className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left">
+            <Link href={"/admin/restaurants/"+(restaurantId?restaurantId:currentRestaurant.id)+"/categories"} className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left">
+            {/* <Link href={"/admin/restaurants/"+currentRestaurant.id+"/categories"} className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left"> */}
               Categories
             </Link>
           </li>

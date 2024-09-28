@@ -7,7 +7,7 @@ import { XCircleIcon } from "@heroicons/react/24/solid";
 
 
 
-export default function CategoryForm({ onCreate,cancelCreateForm }) {
+export default function SubcategoryCreateForm({ onCreate,cancelCreateForm }) {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const [imageName, setImageName] = useState(null); // Store the image name after upload
   const [uploadState, setUploadState] = useState(null); // Manage upload state
@@ -16,12 +16,7 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
   // Handle main form submission
   const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append("category_name", data.name);
-    formData.append("description", data.description);
-    if(imageName!==""&&imageName!=null&&imageName!==undefined){
-      formData.append("category_pic", imageName); // Add the image name to the form data
-
-    }
+    formData.append("name", data.name);
 
     onCreate(formData); // Send form data to the onCreate handler
   };
@@ -76,7 +71,7 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
                 </button>
         <label className="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
         <input
-          name="category_name"
+          name="name"
           placeholder="Enter category name"
           className={`block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
             errors.name ? "border-red-500" : ""
@@ -87,7 +82,7 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
       </div>
 
       {/* Category Description */}
-      <div>
+      {/* <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Category Description</label>
         <textarea
           name="description"
@@ -99,43 +94,15 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
           {...register("description", { required: "Description is required" })}
         />
         {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
-      </div>
+      </div> */}
 
-      {/* Image Upload Form */}
-      <div> 
-        <label className="block text-sm font-medium text-gray-700 mb-1">Category Image</label>
-        <input
-          type="file"
-          name="image"
-          className="block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black bg-white"
-          onChange={handleImageUpload}
-        />
-        {/* Show Upload State */}
-        {uploadState && (
-          <p className={`mt-2 text-sm ${uploadState === "Upload failed" ? "text-red-500" : "text-green-500"}`}>
-            {uploadState}
-          </p>
-        )}
-        {/* Show Upload Progress */}
-        {uploadProgress > 0 && uploadProgress < 100 && (
-          <p className="text-sm text-gray-500">Uploading... {uploadProgress}%</p>
-        )}
-      </div>
-
-      {/* Main Form Submission is only enabled if the image is uploaded */}
-      {imageName && (
-        <>
-          <p className="text-green-500">Image uploaded successfully</p>
-
-          
-        </>
-      )}
+      
       {/* Submit Button */}
       <button
             type="submit"
             className="bg-indigo-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-200"
           >
-            Create Category
+            Create Subcategory
           </button>
     </form>
   );

@@ -1,30 +1,54 @@
 "use client"; // Mark this component as a Client Component
 
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import axios from "axios";
 import { XCircleIcon } from "@heroicons/react/24/solid";
 
 
 
-export default function CategoryForm({ onCreate,cancelCreateForm }) {
+export default function CategoryProductEditForm({ onEdit,product,cancelCreateForm }) {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const [imageName, setImageName] = useState(null); // Store the image name after upload
   const [uploadState, setUploadState] = useState(null); // Manage upload state
   const [uploadProgress, setUploadProgress] = useState(0); // Track upload progress
+  const [isDumping, setIsDumping] = useState(false);
+  const [oldPrice, setOldPrice] = useState(0);
 
   // Handle main form submission
   const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append("category_name", data.name);
+    formData.append("name", data.name);
     formData.append("description", data.description);
-    if(imageName!==""&&imageName!=null&&imageName!==undefined){
-      formData.append("category_pic", imageName); // Add the image name to the form data
+    formData.append("price", data.price);
+    if(isDumping){
+      formData.append("old_price", oldPrice);
+      formData.append("is_dumping", 1);
+    }else {
+      formData.append("is_dumping", 0);
+    }
+    console.log(formData)
 
+    if(imageName!==""&&imageName!=null&&imageName!==undefined){
+      formData.append("product_pic", imageName); // Add the image name to the form data
     }
 
-    onCreate(formData); // Send form data to the onCreate handler
+    onEdit(formData); // Send form data to the onCreate handler
   };
+
+  useEffect(()=>{
+    setValue("name",product.name);
+    setValue("description",product.description);
+    setValue("price",product.price);
+    setValue("product_pic",product.product_pic);
+    setIsDumping(product.is_dumping===1);
+    setOldPrice(product.old_price);
+    if(isDumping){
+      
+      // setTimeout(()=>{setValue("old_price",product.old_price)},1000);
+      // setValue("old_price",product.old_price);
+    }
+  },[product]);
 
   // Handle image upload with axios
   const handleImageUpload = async (e) => {
@@ -66,7 +90,7 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
       {/* Category Name */}
-      <div className="relative"> 
+      <div className="relative">
       <button
                 // className="absolute top-0 right-0 h-16 w-16 text-gray-500 hover:text-gray-700"
                 className="absolute -top-4 right-4 h-1 w-1 text-red-500 hover:text-red-700"
@@ -74,10 +98,10 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
                 >
                 <XCircleIcon className="h-8 w-8" aria-hidden="true" />
                 </button>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
         <input
-          name="category_name"
-          placeholder="Enter category name"
+          name="name"
+          placeholder="Enter product name"
           className={`block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
             errors.name ? "border-red-500" : ""
           } text-black bg-white`}
@@ -88,7 +112,7 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
 
       {/* Category Description */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Category Description</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Product Description</label>
         <textarea
           name="description"
           placeholder="Enter category description"
@@ -101,9 +125,58 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
         {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
       </div>
 
+      {/* Price */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Product Price</label>
+        <textarea
+          name="price"
+          placeholder="Enter price"
+          rows="4"
+          className={`block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+            errors.description ? "border-red-500" : ""
+          } text-black bg-white`}
+          {...register("price", { required: "Price is required" })}
+        />
+        {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price.message}</p>}
+      </div>
+
+      {/* Is Dumping Checkbox */}
+      <div>
+        <label className="text-sm font-medium text-gray-700 mb-1">Is Dumping</label>
+        <input type="checkbox" className="ml-30vw p-3 border border-gray-300 rounded-md" name="is_dumping" checked={isDumping} onChange={()=>{setIsDumping((isDumping)=>!isDumping)}}
+        // <input type="checkbox" className="ml-30vw p-3 border border-gray-300 rounded-md" name="is_dumping" {...register("is_dumping", { required: "Price is required" })}
+        ></input>
+        {/* <textarea
+          name="price"
+          placeholder="Enter price"
+          rows="4"
+          className={`block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+            errors.description ? "border-red-500" : ""
+          } text-black bg-white`}
+          {...register("price", { required: "Price is required" })}
+        /> */}
+        {errors.is_dumping && <p className="text-red-500 text-sm mt-1">{errors.is_dumping.message}</p>}
+      </div>
+
+      {/* Old Price */}
+      {(isDumping===true) && (<div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Product Old Price</label>
+        <input
+          name="old_price"
+          placeholder="Enter old price"
+          className={`block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+            errors.description ? "border-red-500" : ""
+          } text-black bg-white`}
+          value={oldPrice}
+          onChange={e=>setOldPrice(e.target.value)}
+          // {...register("old_price")}
+        />
+        {errors.old_price && <p className="text-red-500 text-sm mt-1">{errors.old_price.message}</p>}
+      </div>)}
+
       {/* Image Upload Form */}
-      <div> 
-        <label className="block text-sm font-medium text-gray-700 mb-1">Category Image</label>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Product Image</label>
         <input
           type="file"
           name="image"
@@ -126,8 +199,6 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
       {imageName && (
         <>
           <p className="text-green-500">Image uploaded successfully</p>
-
-          
         </>
       )}
       {/* Submit Button */}
@@ -135,7 +206,7 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
             type="submit"
             className="bg-indigo-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-200"
           >
-            Create Category
+            Update Product
           </button>
     </form>
   );

@@ -1,13 +1,11 @@
 "use client"; // Mark this component as a Client Component
 
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import axios from "axios";
 import { XCircleIcon } from "@heroicons/react/24/solid";
 
-
-
-export default function CategoryForm({ onCreate,cancelCreateForm }) {
+export default function CategoryEditForm({ onEdit,category,cancelEditForm }) {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const [imageName, setImageName] = useState(null); // Store the image name after upload
   const [uploadState, setUploadState] = useState(null); // Manage upload state
@@ -20,11 +18,16 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
     formData.append("description", data.description);
     if(imageName!==""&&imageName!=null&&imageName!==undefined){
       formData.append("category_pic", imageName); // Add the image name to the form data
-
     }
 
-    onCreate(formData); // Send form data to the onCreate handler
+    onEdit(formData); // Send form data to the onCreate handler
   };
+
+  useEffect(()=>{
+    setValue("name",category.category_name);
+    setValue("description",category.description);
+    setValue("category_pic",category.category_pic);
+  },[category]);
 
   // Handle image upload with axios
   const handleImageUpload = async (e) => {
@@ -66,11 +69,11 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
       {/* Category Name */}
-      <div className="relative"> 
+      <div className="relative">
       <button
                 // className="absolute top-0 right-0 h-16 w-16 text-gray-500 hover:text-gray-700"
                 className="absolute -top-4 right-4 h-1 w-1 text-red-500 hover:text-red-700"
-                onClick={() => cancelCreateForm()}
+                onClick={() => cancelEditForm()}
                 >
                 <XCircleIcon className="h-8 w-8" aria-hidden="true" />
                 </button>
@@ -102,7 +105,7 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
       </div>
 
       {/* Image Upload Form */}
-      <div> 
+      <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Category Image</label>
         <input
           type="file"
@@ -135,7 +138,7 @@ export default function CategoryForm({ onCreate,cancelCreateForm }) {
             type="submit"
             className="bg-indigo-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-200"
           >
-            Create Category
+            Update Category
           </button>
     </form>
   );
