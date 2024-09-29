@@ -42,9 +42,35 @@ export default function RestaurantProfilePage({ params }) {
       }
   }
 
+  const getKeyColor = ()=>{
+    if(currentRestaurant.key_color!==null&&currentRestaurant.key_color!==undefined)
+      return currentRestaurant.key_color;
+    return '#327cc7';
+  }
+
+  const styles = ()=>{
+      return ({
+      root: {
+        display: "block"
+      },
+      item: {
+        color: "white",
+        backgroundColor : getKeyColor(),
+    
+        complete: {
+          textDecoration: "line-through"
+        },
+    
+        due: {
+          color: "red"
+        }
+      }
+    });
+  }
+
   return (
     <Layout>
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto p-6 flex flex-col">
       <img
                     // src={category.image}
                     src={process.env.NEXT_PUBLIC_API_URL+'/uploads/' +currentRestaurant.profile_pic}
@@ -56,6 +82,11 @@ export default function RestaurantProfilePage({ params }) {
         <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-8">Restaurant Profile (ID: {restaurantId})</h2>
         <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Restaurant Name : {currentRestaurant.name}</h2>
         <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">About Restaurant : {currentRestaurant.description}</h2>
+        <div className="flex flex-row">
+        <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Key Color : {currentRestaurant.key_color}</h2>
+        <div style={styles().item} className='w-16 h-8 object-cover mb-4 rounded-md shadow-md'></div>
+        </div>
+
 
         
       </div>
