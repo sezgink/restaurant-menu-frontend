@@ -4,26 +4,21 @@
 
 // src/app/admin/restaurants/[id]/page.js
 
-import { useState,useContext } from 'react';
+import { useState,useContext, useEffect } from 'react';
 import Layout from '../../../../components/Layout';
 import { RestaurantContext } from '@/context/RestaurantContext';
+import { SwatchesPicker } from 'react-color';
+import { useForm } from 'react-hook-form';
+
 
 export default function RestaurantProfilePage({ params }) {
   const { restaurantId } = params; // Get the restaurant ID from the URL
   const [activeTab, setActiveTab] = useState('categories'); // Default tab
   const { currentRestaurant,setCurrentRestaurant,chooseRestaurantById} = useContext(RestaurantContext);
-
-
-  // Dummy data for categories and products
-  const categories = [
-    { id: 1, name: "Appetizers" },
-    { id: 2, name: "Main Courses" },
-  ];
-
-  const products = [
-    { id: 1, name: "Pizza", category: "Main Courses" },
-    { id: 2, name: "Salad", category: "Appetizers" },
-  ];
+  const [editMode,setEditMode] = useState(false);
+  const [colorEditMode,setColorEditMode] = useState(true);
+  const [currentColor,setCurrentColor] = useState(null)
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const fetchRestaurant = async ()=>{
     try {
@@ -43,11 +38,18 @@ export default function RestaurantProfilePage({ params }) {
   }
 
   const getKeyColor = ()=>{
-    if(currentRestaurant.key_color!==null&&currentRestaurant.key_color!==undefined)
+    if(currentRestaurant.key_color!==null&&currentRestaurant.key_color!==undefined&&currentRestaurant.key_color!=='')
       return currentRestaurant.key_color;
     return '#327cc7';
   }
+  // useEffect(()=>{
+  //   setCurrentColor(currentRestaurant.key_color)
+  // },[currentRestaurant]);
 
+  const toggleEditMode = (newState)=>{
+    setCurrentColor(getKeyColor())
+    setEditMode(newState);
+  }
   const styles = ()=>{
       return ({
       root: {
@@ -67,11 +69,73 @@ export default function RestaurantProfilePage({ params }) {
       }
     });
   }
+  const handleChangeComplete = (color)=>{
+    console.log(color)
+    setCurrentColor(color.hex)
+    setColorEditMode(false)
+  }
+
+  const onSubmit = (data) => {
+    const newProduct = {
+      id: Date.now(), // Temporary ID until you integrate with the backend
+      ...data,
+      image: URL.createObjectURL(data.image[0]) // Temporarily render the image
+    };
+    onCreate(newProduct); // Callback to pass the new product up to the parent component
+  };
 
   return (
     <Layout>
       <div className="container mx-auto p-6 flex flex-col">
-      <img
+        {editMode ?
+        <>
+
+       
+       <form onSubmit={handleSubmit(onSubmit)}>
+      <div>
+        <label>Restaurant Name</label>
+        <input
+          type="text"
+          name="name"
+          {...register('name', { required: 'Product name is required' })}
+        />
+        {errors.name && <p>{errors.name.message}</p>}
+      </div>
+
+      <div>
+        <label>About Restaurant</label>
+        <textarea
+          name="description"
+          {...register('description', { required: 'Description is required' })}
+        />
+        {errors.description && <p>{errors.description.message}</p>}
+      </div>
+
+      <div>
+        <label>Restaurant Image</label>
+        <input
+          type="file"
+          name="image"
+          {...register('image', { required: 'Image is required' })}
+        />
+        {errors.image && <p>{errors.image.message}</p>}
+      </div>
+      <button type="submit">Edit Restaurant</button>
+    </form>
+    <div className="flex flex-row">
+        <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Key Color :</h2>
+
+        {colorEditMode? <SwatchesPicker color={currentColor} onChangeComplete={handleChangeComplete } />
+        // : <div style={{background:currentColor}} 
+        : <div style={{backgroundColor:currentColor}} 
+        className='w-16 h-8 object-cover mb-4 rounded-md shadow-md hover:w-20 hover:h-10'
+        onClick={()=>setColorEditMode(true)}></div>
+        
+        }
+        </div>
+
+        </> : <>
+         <img
                     // src={category.image}
                     src={process.env.NEXT_PUBLIC_API_URL+'/uploads/' +currentRestaurant.profile_pic}
                     alt={currentRestaurant.name}
@@ -86,7 +150,12 @@ export default function RestaurantProfilePage({ params }) {
         <div className="flex flex-row">
         <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Key Color : {currentRestaurant.key_color}</h2>
         <div style={styles().item} className='w-16 h-8 object-cover mb-4 rounded-md shadow-md'></div>
+        <button type="submit" onClick={()=>toggleEditMode(true)}>Edit Restaurant Profile</button>
+
         </div>
+
+        </>}
+      
 
 
         
