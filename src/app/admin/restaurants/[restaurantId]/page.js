@@ -7,8 +7,8 @@
 import { useState,useContext, useEffect } from 'react';
 import Layout from '../../../../components/Layout';
 import { RestaurantContext } from '@/context/RestaurantContext';
-import { SwatchesPicker } from 'react-color';
 import { useForm } from 'react-hook-form';
+import RestaurantProfileEditForm from '@/components/RestaurantProfileEditForm';
 
 
 export default function RestaurantProfilePage({ params }) {
@@ -16,8 +16,6 @@ export default function RestaurantProfilePage({ params }) {
   const [activeTab, setActiveTab] = useState('categories'); // Default tab
   const { currentRestaurant,setCurrentRestaurant,chooseRestaurantById} = useContext(RestaurantContext);
   const [editMode,setEditMode] = useState(false);
-  const [colorEditMode,setColorEditMode] = useState(true);
-  const [currentColor,setCurrentColor] = useState(null)
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const fetchRestaurant = async ()=>{
@@ -47,7 +45,7 @@ export default function RestaurantProfilePage({ params }) {
   // },[currentRestaurant]);
 
   const toggleEditMode = (newState)=>{
-    setCurrentColor(getKeyColor())
+    // setCurrentColor(getKeyColor())
     setEditMode(newState);
   }
   const styles = ()=>{
@@ -69,11 +67,7 @@ export default function RestaurantProfilePage({ params }) {
       }
     });
   }
-  const handleChangeComplete = (color)=>{
-    console.log(color)
-    setCurrentColor(color.hex)
-    setColorEditMode(false)
-  }
+  
 
   const onSubmit = (data) => {
     const newProduct = {
@@ -81,6 +75,7 @@ export default function RestaurantProfilePage({ params }) {
       ...data,
       image: URL.createObjectURL(data.image[0]) // Temporarily render the image
     };
+    setEditMode(false);
     onCreate(newProduct); // Callback to pass the new product up to the parent component
   };
 
@@ -88,53 +83,8 @@ export default function RestaurantProfilePage({ params }) {
     <Layout>
       <div className="container mx-auto p-6 flex flex-col">
         {editMode ?
-        <>
-
-       
-       <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label>Restaurant Name</label>
-        <input
-          type="text"
-          name="name"
-          {...register('name', { required: 'Product name is required' })}
-        />
-        {errors.name && <p>{errors.name.message}</p>}
-      </div>
-
-      <div>
-        <label>About Restaurant</label>
-        <textarea
-          name="description"
-          {...register('description', { required: 'Description is required' })}
-        />
-        {errors.description && <p>{errors.description.message}</p>}
-      </div>
-
-      <div>
-        <label>Restaurant Image</label>
-        <input
-          type="file"
-          name="image"
-          {...register('image', { required: 'Image is required' })}
-        />
-        {errors.image && <p>{errors.image.message}</p>}
-      </div>
-      <button type="submit">Edit Restaurant</button>
-    </form>
-    <div className="flex flex-row">
-        <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Key Color :</h2>
-
-        {colorEditMode? <SwatchesPicker color={currentColor} onChangeComplete={handleChangeComplete } />
-        // : <div style={{background:currentColor}} 
-        : <div style={{backgroundColor:currentColor}} 
-        className='w-16 h-8 object-cover mb-4 rounded-md shadow-md hover:w-20 hover:h-10'
-        onClick={()=>setColorEditMode(true)}></div>
-        
-        }
-        </div>
-
-        </> : <>
+        <RestaurantProfileEditForm beginColor={getKeyColor()} restaurant={currentRestaurant} />
+         : <>
          <img
                     // src={category.image}
                     src={process.env.NEXT_PUBLIC_API_URL+'/uploads/' +currentRestaurant.profile_pic}
