@@ -26,7 +26,7 @@ export default function RestaurantProfileEditForm ({ onEdit,restaurant,beginColo
     formData.append("key_color", currentColor);
 
     if(imageName!==""&&imageName!=null&&imageName!==undefined){
-      formData.append("product_pic", imageName); // Add the image name to the form data
+      formData.append("profile_pic", imageName); // Add the image name to the form data
     }
 
     onEdit(formData); // Send form data to the onCreate handler
@@ -36,7 +36,7 @@ export default function RestaurantProfileEditForm ({ onEdit,restaurant,beginColo
     setValue("name",restaurant.name);
     setValue("description",restaurant.description);
     
-    setValue("product_pic",restaurant.product_pic);
+    setValue("profile_pic",restaurant.profile_pic);
     setCurrentColor(beginColor)
   },[restaurant]);
 
@@ -98,7 +98,7 @@ export default function RestaurantProfileEditForm ({ onEdit,restaurant,beginColo
                 >
                 <XCircleIcon className="h-8 w-8" aria-hidden="true" />
                 </button>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Restaurant Name</label>
         <input
           name="name"
           placeholder="Enter product name"
@@ -112,7 +112,7 @@ export default function RestaurantProfileEditForm ({ onEdit,restaurant,beginColo
 
       {/* Category Description */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Product Description</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">About Restaurant: </label>
         <textarea
           name="description"
           placeholder="Enter category description"
