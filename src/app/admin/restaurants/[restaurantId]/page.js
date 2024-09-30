@@ -9,12 +9,13 @@ import Layout from '../../../../components/Layout';
 import { RestaurantContext } from '@/context/RestaurantContext';
 import { useForm } from 'react-hook-form';
 import RestaurantProfileEditForm from '@/components/RestaurantProfileEditForm';
+import axios from "axios";
 
 
 export default function RestaurantProfilePage({ params }) {
   const { restaurantId } = params; // Get the restaurant ID from the URL
   const [activeTab, setActiveTab] = useState('categories'); // Default tab
-  const { currentRestaurant,setCurrentRestaurant,chooseRestaurantById} = useContext(RestaurantContext);
+  const { currentRestaurant,setCurrentRestaurant,chooseRestaurantById,updateRestaurant} = useContext(RestaurantContext);
   const [editMode,setEditMode] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -68,6 +69,9 @@ export default function RestaurantProfilePage({ params }) {
     });
   }
   
+  useEffect(()=>{
+    console.log(currentRestaurant)
+  },[currentRestaurant])
 
   const onSubmit = (data) => {
     const newProduct = {
@@ -79,11 +83,33 @@ export default function RestaurantProfilePage({ params }) {
     onCreate(newProduct); // Callback to pass the new product up to the parent component
   };
 
+  const onEdit = async (changes)=>{
+    try{
+      // const response = await axios.patch(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+restaurantId,changes,{withCredentials:true,headers: {
+      //   'Content-Type': 'application/json', // Sending JSON data
+      // }});
+
+      await updateRestaurant(changes,restaurantId);
+      // chooseRestaurantById(restaurantId)
+      // console.log(response);
+      
+  
+      // setCategories(fetchedCategories || []);
+      setEditMode(false);
+
+      //WIP fetch restaurant if needed
+      // fetchRestaurant();
+
+      } catch(err){
+        console.log(err)
+      }
+  }
+
   return (
     <Layout>
       <div className="container mx-auto p-6 flex flex-col">
         {editMode ?
-        <RestaurantProfileEditForm beginColor={getKeyColor()} restaurant={currentRestaurant} />
+        <RestaurantProfileEditForm beginColor={getKeyColor()} restaurant={currentRestaurant} onEdit={onEdit} cancelCreateForm={()=>setEditMode(false)} />
          : <>
          <img
                     // src={category.image}
@@ -98,7 +124,8 @@ export default function RestaurantProfilePage({ params }) {
         <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">About Restaurant : {currentRestaurant.description}</h2>
         <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Restaurant Url : <a href={'https://sitename.com/'+currentRestaurant.restoname}> https://sitename.com/{currentRestaurant.restoname}</a> </h2>
         <div className="flex flex-row">
-        <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Key Color : {currentRestaurant.key_color}</h2>
+        {/* <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Key Color : {currentRestaurant.key_color}</h2> */}
+        <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Key Color: </h2>
         <div style={styles().item} className='w-16 h-8 object-cover mb-4 rounded-md shadow-md'></div>
         <button type="submit" onClick={()=>toggleEditMode(true)}>Edit Restaurant Profile</button>
 

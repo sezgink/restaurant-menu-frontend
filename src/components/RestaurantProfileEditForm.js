@@ -13,8 +13,8 @@ export default function RestaurantProfileEditForm ({ onEdit,restaurant,beginColo
   const [imageName, setImageName] = useState(null); // Store the image name after upload
   const [uploadState, setUploadState] = useState(null); // Manage upload state
   const [uploadProgress, setUploadProgress] = useState(0); // Track upload progress
-  const [colorEditMode,setColorEditMode] = useState(true);
-  const [currentColor,setCurrentColor] = useState(null)
+  const [colorEditMode,setColorEditMode] = useState(false);
+  const [currentColor,setCurrentColor] = useState("#ffffff")
 
 
 
@@ -23,6 +23,7 @@ export default function RestaurantProfileEditForm ({ onEdit,restaurant,beginColo
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("description", data.description);
+    formData.append("key_color", currentColor);
 
     if(imageName!==""&&imageName!=null&&imageName!==undefined){
       formData.append("product_pic", imageName); // Add the image name to the form data
@@ -171,7 +172,7 @@ export default function RestaurantProfileEditForm ({ onEdit,restaurant,beginColo
             type="submit"
             className="bg-indigo-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-200"
           >
-            Update Product
+            Update Restaurant
           </button>
     </form>
   );

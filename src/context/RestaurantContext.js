@@ -93,6 +93,32 @@ export function RestaurantProvider({ children }) {
     }
   };
 
+  const updateRestaurant = async (changes,restaurantId) => {
+    try {
+
+      const response = await axios.patch(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+restaurantId,changes,{withCredentials:true,headers: {
+        'Content-Type': 'application/json', // Sending JSON data
+      }});
+      console.log(response)
+
+      console.log(2)
+
+
+      const fetchedRestaurants = await fetchRestaurantsWithReturn(); // Refetch the updated restaurant list
+      console.log(3)
+      console.log(fetchedRestaurants)
+      console.log(4)
+      const found = fetchedRestaurants.find((resto)=>String(resto.id)===restaurantId);
+        console.log({found})
+        if(found)
+          setCurrentRestaurant(found);
+
+        console.log(5)
+    } catch (error) {
+      console.error("Failed to add restaurant", error);
+    }
+  };
+
   useEffect(() => {
     console.log("Fetching restaurants on mount")
     fetchRestaurants(); // Fetch restaurants on mount
@@ -103,7 +129,7 @@ export function RestaurantProvider({ children }) {
   return (
     // <RestaurantContext.Provider value={restaurants}>
     // <RestaurantContext.Provider value={contextValue}>
-    <RestaurantContext.Provider value={{ restaurants, addRestaurant,currentRestaurant,setCurrentRestaurant,chooseRestaurantById }}>
+    <RestaurantContext.Provider value={{ restaurants, addRestaurant,currentRestaurant,setCurrentRestaurant,chooseRestaurantById,updateRestaurant }}>
       {children}
     </RestaurantContext.Provider>
   );
