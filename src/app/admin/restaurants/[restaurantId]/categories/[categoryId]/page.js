@@ -11,6 +11,7 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import SubtitleItem from "@/components/SubtitleItem";
 import SubcategoryCreateForm from "@/components/SubcategoryCreateForm";
 import SubcategoryEditForm from "@/components/SubcategoryEditForm";
+import EditPanelModal from "@/components/EditPanelModal";
 
 export default function CategoryProductsPage({params}) {
   const [products, setProducts] = useState([]); // Fetch from API
@@ -378,19 +379,35 @@ export default function CategoryProductsPage({params}) {
 
         {/* Edit Product Form */}
         {showEditForm.state && (
+          <EditPanelModal isOpen={showEditForm.state}>
           <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
             <CategoryProductEditForm onEdit={handleEditProduct} 
             product={showEditForm.product} cancelCreateForm={cancelForm} />
           </div>
+          </EditPanelModal>
         )}
+        {/* {showEditForm.state && (
+          <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
+            <CategoryProductEditForm onEdit={handleEditProduct} 
+            product={showEditForm.product} cancelCreateForm={cancelForm} />
+          </div>
+        )} */}
 
         {/* Edit Product Form */}
         {showSubEditForm.state && (
+          <EditPanelModal isOpen={showSubEditForm.state}>
+            <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
+              <SubcategoryEditForm onEdit={handleEditSub} cancelEditForm={cancelForm} 
+              category={showSubEditForm.product} cancelCreateForm={cancelForm} />
+            </div>
+          </EditPanelModal>
+        )}
+        {/* {showSubEditForm.state && (
           <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
             <SubcategoryEditForm onEdit={handleEditSub} cancelEditForm={cancelForm} 
-            category={showEditForm.product} cancelCreateForm={cancelForm} />
+            category={showSubEditForm.product} cancelCreateForm={cancelForm} />
           </div>
-        )}
+        )} */}
 
          {/* Confirmation Dialog for Deleting Product */}
          {showDeleteConfirmation.state && (

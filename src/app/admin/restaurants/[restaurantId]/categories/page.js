@@ -10,6 +10,7 @@ import CategoryItem from "@/components/CategoryItem";
 import CategoryEditForm from "@/components/CategoryEditForm";
 import { set } from "react-hook-form";
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import EditPanelModal from "@/components/EditPanelModal"
 
 
 export default function CategoriesPage({params}) {
@@ -226,11 +227,19 @@ export default function CategoriesPage({params}) {
 
         {/* Edit Category Form */}
         {showEditForm.state && (
+          <EditPanelModal isOpen={showEditForm.state}>
+            <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
+              <CategoryEditForm onEdit={handleEditCategory} category={showEditForm.category} 
+              cancelEditForm={cancelEditForm} />
+            </div>
+          </EditPanelModal>
+        )}
+        {/* {showEditForm.state && (
           <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
             <CategoryEditForm onEdit={handleEditCategory} category={showEditForm.category} 
             cancelEditForm={cancelEditForm} />
           </div>
-        )}
+        )} */}
 
         {/* Confirmation Dialog for Deleting Product */}
         {showDeleteConfirmation.state && (
