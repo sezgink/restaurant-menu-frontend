@@ -128,10 +128,9 @@ export default function CategoryProductEditForm({ onEdit,product,cancelCreateFor
       {/* Price */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Product Price</label>
-        <textarea
+        <input
           name="price"
           placeholder="Enter price"
-          rows="4"
           className={`block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
             errors.description ? "border-red-500" : ""
           } text-black bg-white`}
