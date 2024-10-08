@@ -43,22 +43,23 @@ export default function FoodItem({ product, openProductEdit, showDeleteDialog })
         <p className="text-gray-600">{product.description}</p>
       </div>
 
-      <div className="flex space-x-2">
+      <div className="flex flex-col space-y-4 items-end">
         <button
-          className="text-gray-500 hover:text-gray-700"
+          className="text-gray-500 hover:text-gray-700 flex items-center"
           onClick={() => openProductEdit(product)}
         >
           Edit
-          <PencilSquareIcon className="h-5 w-5 inline" aria-hidden="true" />
+          <PencilSquareIcon className="h-5 w-5 ml-1" aria-hidden="true" />
         </button>
         <button
-          className="text-gray-500 hover:text-gray-700"
+          className="text-gray-500 hover:text-gray-700 flex items-center"
           onClick={() => showDeleteDialog(product)}
         >
           Delete
-          <TrashIcon className="h-5 w-5 inline" aria-hidden="true" />
+          <TrashIcon className="h-5 w-5 ml-1" aria-hidden="true" />
         </button>
-      </div>
+    </div>
+
     </div>
   );
 }

@@ -35,16 +35,16 @@ export default function CategoryItem({category,openCategoryEdit,showDeleteDialog
                   <p className="text-gray-600 text-center">{category.description}</p>
                 </div>
                 </Link>
-                <div className="flex space-x-2">
+                <div className="flex flex-col space-y-4 items-end">
                 <button
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-gray-500 hover:text-gray-700 flex items-center"
                   onClick={() => openCategoryEdit(category)}
                 >
                   Edit
                   <PencilSquareIcon className="h-5 w-5 inline" aria-hidden="true" />
                 </button>
                 <button
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-gray-500 hover:text-gray-700 flex items-center"
                   onClick={() => showDeleteDialog(category)}
                 >
                   Delete
