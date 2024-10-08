@@ -111,15 +111,16 @@ export default function RestaurantProfilePage({ params }) {
         {editMode ?
         <RestaurantProfileEditForm beginColor={getKeyColor()} restaurant={currentRestaurant} onEdit={onEdit} cancelCreateForm={()=>setEditMode(false)} />
          : <>
-         <img
+         
+        <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-8">Restaurant Profile (ID: {restaurantId})</h2>
+        <img
                     // src={category.image}
                     src={process.env.NEXT_PUBLIC_API_URL+'/uploads/' +currentRestaurant.profile_pic}
                     alt={currentRestaurant.name}
-                    className="w-40 h-40 object-cover rounded-md shadow-md"
+                    className="w-60 h-60 object-cover rounded-md shadow-md self-center"
                     // className="w-40 h-40 object-cover rounded-md shadow-md flex-start"
                     // className="w-40 h-40 object-cover mb-4 rounded-full shadow-md"
                   />
-        <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-8">Restaurant Profile (ID: {restaurantId})</h2>
         <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Restaurant Name : {currentRestaurant.name}</h2>
         <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">About Restaurant : {currentRestaurant.description}</h2>
         <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Restaurant Url : <a href={'https://sitename.com/'+currentRestaurant.restoname}> https://sitename.com/{currentRestaurant.restoname}</a> </h2>
