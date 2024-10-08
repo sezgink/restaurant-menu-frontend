@@ -29,10 +29,14 @@ export default function CategoryItem({category,openCategoryEdit,showDeleteDialog
                   />
                 </div>
                 <div className='flex flex-col flex-1'>
+                  <h3 className="text-xl text-gray-800 mb-2">Name:</h3>
                   <h3 className="text-2xl font-bold text-gray-800 mb-2">{category.category_name}</h3>
                 </div>
                 <div className='flex flex-col flex-1'>
-                  <p className="text-gray-600 text-center">{category.description}</p>
+                  {/* <p className="text-gray-600 text-center">Description:</p> */}
+                  <h3 className="text-xl text-gray-800 mb-2">Description:</h3>
+                  <p className="text-gray-600">{category.description}</p>
+                  {/* <p className="text-gray-600 text-center">{category.description}</p> */}
                 </div>
                 </Link>
                 <div className="flex flex-col space-y-4 items-end">
