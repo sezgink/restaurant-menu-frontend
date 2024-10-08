@@ -364,7 +364,7 @@ export default function CategoryProductsPage({params}) {
               setShowCreateForm(false);
               
             } }
-            className="bg-indigo-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-200"
+            className="bg-indigo-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-200 mt-1"
           >
             Create Subtitle
           </button>
