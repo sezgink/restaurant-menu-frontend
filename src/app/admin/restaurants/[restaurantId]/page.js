@@ -127,9 +127,13 @@ export default function RestaurantProfilePage({ params }) {
         {/* <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Key Color : {currentRestaurant.key_color}</h2> */}
         <h2 className="text-2xl font-extrabold text-left text-gray-800 mb-8">Key Color: </h2>
         <div style={styles().item} className='w-16 h-8 object-cover mb-4 rounded-md shadow-md'></div>
-        <button type="submit" onClick={()=>toggleEditMode(true)}>Edit Restaurant Profile</button>
+        
 
         </div>
+        <button className="bg-indigo-600 w-1/4 text-white py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-200"
+         type="submit" onClick={()=>toggleEditMode(true)}>
+          Edit Restaurant Profile
+        </button>
 
         </>}
       
