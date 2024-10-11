@@ -49,6 +49,15 @@ export default function RestaurantProfilePage({ params }) {
     // setCurrentColor(getKeyColor())
     setEditMode(newState);
   }
+  const createMenu = async ()=>{
+    try{
+      const response = await axios.post(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+restaurantId+'/menu',{},{withCredentials:true});
+      console.log(response)
+    } catch(err){
+      console.log(err);
+    }
+
+  }
   const styles = ()=>{
       return ({
       root: {
@@ -134,6 +143,11 @@ export default function RestaurantProfilePage({ params }) {
         <button className="bg-indigo-600 w-1/4 text-white py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-200"
          type="submit" onClick={()=>toggleEditMode(true)}>
           Edit Restaurant Profile
+        </button>
+
+        <button className="bg-indigo-600 mt-1 w-1/4 text-white py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-200"
+         type="submit" onClick={()=>createMenu()}>
+          Create Restaurant Menu
         </button>
 
         </>}
