@@ -6,6 +6,7 @@ import { RestaurantContext } from '../context/RestaurantContext.js';
 import { AuthContext } from "@/context/AuthContext.js"; 
 import { useRouter,useParams } from 'next/navigation';
 import { redirect,usePathname } from 'next/navigation'
+import LeftSidebar from "./LeftSidebar.js";
 
 
 
@@ -157,27 +158,7 @@ export default function Layout({ children }) {
       </header>
 
       {/* Sidebar */}
-      <nav className="fixed top-16 left-0 w-64 bg-gray-800 text-white flex flex-col py-6 h-full">
-        <h2 className="text-2xl font-bold mb-8 px-6 text-left">Dashboard</h2>
-        <ul className="space-y-4 w-full">
-          <li>
-            <Link href="/admin/restaurants" className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left">
-              Restaurants
-            </Link>
-          </li>
-          <li>
-            <Link href={"/admin/restaurants/"+(restaurantId?restaurantId:currentRestaurant.id)+"/categories"} className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left">
-            {/* <Link href={"/admin/restaurants/"+currentRestaurant.id+"/categories"} className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left"> */}
-              Categories
-            </Link>
-          </li>
-          <li>
-            <Link href="/admin/products" className="block text-lg py-2 px-6 rounded-lg hover:bg-gray-700 text-left">
-              Products
-            </Link>
-          </li>
-        </ul>
-      </nav>
+      <LeftSidebar restaurantId={restaurantId} currentRestaurant={currentRestaurant}/>
 
       {/* Main Content */}
       <main className="flex-1 bg-gray-100 ml-64 mt-16">
