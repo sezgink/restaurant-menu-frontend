@@ -15,6 +15,7 @@ import EditPanelModal from "@/components/EditPanelModal";
 
 export default function CategoryProductsPage({params}) {
   const [products, setProducts] = useState([]); // Fetch from API
+  const [categories, setCategories] = useState({currentCategory:null,list:[]}); // Fetch from API
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showSubcategoryCreateForm, setShowSubcategoryCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState({state:false,product:{}});
@@ -291,12 +292,40 @@ export default function CategoryProductsPage({params}) {
       }
 
   }
+  const fetchCategories = async()=>{
+    try{
+      chooseRestaurantById(restaurantId)
+      // setCurrentRestaurant(restaurantId)
+      const categoryResponse = await axios.get(process.env.NEXT_PUBLIC_API_URL+'/api/restaurants/'+restaurantId+'/categories',{withCredentials:true});
+      // console.log(categoryResponse);
+      const fetchedCategories = categoryResponse.data;
+      let currentCategory = null;
+      for (let i = 0; i < fetchedCategories.length; i++) {
+        const category = fetchedCategories[i];
+        if(category.id===categoryId){
+          currentCategory = {data : category, index:i};
+        }
+        if(category.category_name==='Uncategorized'){
+          fetchedCategories.splice(i,1);
+          i-=1;
+        }
+      }
+      // console.log(fetchedProducts)
+        setCategories({currentCategory,list:fetchedCategories});
+        // setRestaurants(restaurantsMock);
+      } catch (error) {
+        console.error("Failed to fetch categories", error);
+      }
 
+  };
   useEffect(()=>{
-    
+    fetchCategories();
     fetchCategoryProducts();
+    
   },[])
   useEffect(()=>{
+    
+    fetchCategories();
     fetchCategoryProducts();
   },[restaurantId,categoryId])
   // },[currentRestaurant,id])
@@ -382,7 +411,8 @@ export default function CategoryProductsPage({params}) {
           <EditPanelModal isOpen={showEditForm.state}>
           <div className="w-full max-w-2xl mt-8 bg-white shadow-lg rounded-lg p-6">
             <CategoryProductEditForm onEdit={handleEditProduct} 
-            product={showEditForm.product} cancelCreateForm={cancelForm} />
+            product={showEditForm.product} cancelCreateForm={cancelForm}
+            categories={categories} />
           </div>
           </EditPanelModal>
         )}

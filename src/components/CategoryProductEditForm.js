@@ -7,7 +7,7 @@ import { XCircleIcon } from "@heroicons/react/24/solid";
 
 
 
-export default function CategoryProductEditForm({ onEdit,product,cancelCreateForm }) {
+export default function CategoryProductEditForm({ onEdit,product,cancelCreateForm,categories }) {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const [imageName, setImageName] = useState(null); // Store the image name after upload
   const [uploadState, setUploadState] = useState(null); // Manage upload state
@@ -33,6 +33,10 @@ export default function CategoryProductEditForm({ onEdit,product,cancelCreateFor
       formData.append("product_pic", imageName); // Add the image name to the form data
     }
 
+    if(data.category_id!==product.category_id){
+      formData.append("category_id", data.category_id);
+    }
+
     onEdit(formData); // Send form data to the onCreate handler
   };
 
@@ -41,6 +45,7 @@ export default function CategoryProductEditForm({ onEdit,product,cancelCreateFor
     setValue("description",product.description);
     setValue("price",product.price);
     setValue("product_pic",product.product_pic);
+    setValue("category_id",product.category_id);
     setIsDumping(product.is_dumping===1);
     setOldPrice(product.old_price);
     if(isDumping){
@@ -50,6 +55,10 @@ export default function CategoryProductEditForm({ onEdit,product,cancelCreateFor
     }
   },[product]);
 
+  useEffect(()=>{
+    console.log({"categories in edit form":categories})
+
+  },[categories]);
   // Handle image upload with axios
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -200,6 +209,27 @@ export default function CategoryProductEditForm({ onEdit,product,cancelCreateFor
           <p className="text-green-500">Image uploaded successfully</p>
         </>
       )}
+
+      {/* Category */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+        <select
+          name="category_id"
+          placeholder="Select category"
+          className={`block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+            errors.description ? "border-red-500" : ""
+          } text-black bg-white`}
+          {...register("category_id")}
+        >
+          {categories.list.map((category)=>(
+              <option value={category.id} key={category.id}>{category.category_name}</option>
+            ))
+          }
+
+        </select>
+        {errors.category_id && <p className="text-red-500 text-sm mt-1">{errors.category_id.message}</p>}
+      </div>
+      
       {/* Submit Button */}
       <button
             type="submit"
